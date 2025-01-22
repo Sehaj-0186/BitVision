@@ -5,21 +5,22 @@ import {
   RainbowKitProvider,
   getDefaultConfig, darkTheme, midnightTheme
 } from '@rainbow-me/rainbowkit';
-import { 
+import {
   mainnet,
   polygon,
   optimism,
   arbitrum,
   base,
   zora,
-  goerli
-} from 'wagmi/chains'
-import { WagmiConfig } from 'wagmi'
+  goerli,
+  sepolia,
+} from "wagmi/chains";
+import { WagmiProvider } from 'wagmi'
 import { http } from 'viem'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const projectId = "c60d838bc7682699062e8af4283518b3";
-const chains = [mainnet, polygon, optimism, arbitrum, base, zora, goerli];
+const chains = [mainnet, polygon, optimism, arbitrum, base, zora, goerli,sepolia];
 
 // Create a client
 const queryClient = new QueryClient()
@@ -42,7 +43,7 @@ const config = getDefaultConfig({
 const Providers = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <WagmiConfig config={config}>
+      <WagmiProvider config={config}>
         <RainbowKitProvider chains={chains} modalSize='lg'  
          theme={darkTheme({
           accentColor: '#d9dbd9',
@@ -52,7 +53,7 @@ const Providers = ({ children }) => {
         })}>
           {children}
         </RainbowKitProvider>
-      </WagmiConfig>
+      </WagmiProvider>
     </QueryClientProvider>
   )
 }
