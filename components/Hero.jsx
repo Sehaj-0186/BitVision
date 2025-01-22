@@ -1,8 +1,17 @@
 'use client'
 import React, { useState } from 'react';
+import { useAppContext } from '@/app/context';
+import { useRouter } from 'next/router';
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const { setIsClicked } = useAppContext();
+  const router = useRouter();
+
+  const handleClick = () => {
+    setIsClicked(true);
+    router.push('/dashboard'); 
+  };
 
   return (
     <div className="flex flex-col absolute top-32 w-full h-[60vh] items-center justify-evenly">
@@ -22,7 +31,6 @@ const Hero = () => {
         <span>Make smarter decisions with real-time insights.</span>
       </div>
       <div className="mt-4 relative">
-        {/* Tooltip */}
         <div
           className={`absolute bottom-[120%] text-center w-64 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-gray-200 text-gray-800 text-sm rounded opacity-0 pointer-events-none transition-opacity duration-500 ${
             isHovered ? 'opacity-100' : ''
@@ -34,6 +42,7 @@ const Hero = () => {
           className="bg-transparent border-[1px] border-gray-600 rounded-md px-6 py-2 text-gray-300"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onClick={handleClick}
         >
           Get Started!
         </button>
