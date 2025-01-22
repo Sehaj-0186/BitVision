@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import "@rainbow-me/rainbowkit/styles.css";
-import { AppWrapper } from "./context";
+import { AppWrapper } from "../components/context";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -25,9 +25,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppWrapper>
-        <Providers>
-        {children}
-        </Providers>
+          <Providers>{children}</Providers>
         </AppWrapper>
       </body>
     </html>

@@ -1,16 +1,16 @@
-'use client'
-import React, { useState } from 'react';
-import { useAppContext } from '@/app/context';
-import { useRouter } from 'next/router';
+"use client";
+import React, { useState } from "react";
+import { useAppContext } from "@/components/context";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { setIsClicked } = useAppContext();
-  const router = useRouter();
+  const router=useRouter();
 
   const handleClick = () => {
     setIsClicked(true);
-    router.push('/dashboard'); 
+    router.replace("/dashboard");
   };
 
   return (
@@ -33,7 +33,7 @@ const Hero = () => {
       <div className="mt-4 relative">
         <div
           className={`absolute bottom-[120%] text-center w-64 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-gray-200 text-gray-800 text-sm rounded opacity-0 pointer-events-none transition-opacity duration-500 ${
-            isHovered ? 'opacity-100' : ''
+            isHovered ? "opacity-100" : ""
           }`}
         >
           Make sure your wallet is connected!
