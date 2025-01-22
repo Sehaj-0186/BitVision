@@ -10,7 +10,7 @@ const Hero = () => {
 
   const handleClick = () => {
     setIsClicked(true);
-    router.replace("/dashboard");
+    router.push("/dashboard");
   };
 
   return (
