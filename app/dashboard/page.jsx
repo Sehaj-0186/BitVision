@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../components/Sidebar";
 import {
   IconArrowLeft,
@@ -12,8 +12,22 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Overview from "../../components/Overview";
-
+import axios from "axios";
 export default function page() {
+   const walletAddress = "0x7c1958Ba95AB3170f6069DADF4de304B0c00000C";
+   useEffect(() => {
+     async function fetchPortfolio(walletAddress) {
+       try {
+         const response = await axios.get("/api/walletportfolio", {
+           params: { wallet: walletAddress },
+         });
+         console.log(response.data);
+       } catch (error) {
+         console.error("Error fetching portfolio:", error);
+       }
+     }
+     fetchPortfolio(walletAddress);
+   }, []); 
   const links = [
     {
       label: "Dashboard",
