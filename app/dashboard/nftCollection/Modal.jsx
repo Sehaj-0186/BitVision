@@ -106,7 +106,9 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
           />
           <h2 className="text-xl text-white font-bold mb-2">{nft.name}</h2>
           <p className="text-gray-300 mb-1">Collection:</p>
-          <div className="text-white mb-3">{formatValue(nft.collection)}</div>
+          <div className="text-white mb-3">
+            <a href={`https://eth.nftscan.com/${nft.contract_address}`}>{formatValue(nft.collection)}</a>
+            </div>
           <p className="text-gray-300 mb-1">Token ID:</p>
           <p className="text-white">{formatValue(nft.token_id)}</p>
         </div>

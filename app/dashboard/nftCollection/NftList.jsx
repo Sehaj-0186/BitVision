@@ -88,7 +88,7 @@ const LoadingSpinner = () => {
 };
 
  const LoadingLine = () => (
-  <div className="fixed top-0 left-0 right-0 h-1 overflow-hidden">
+  <div className="fixed top-0 left-0 right-0 h-[1px] overflow-hidden">
     <div 
       className="h-full w-full animate-gradient-x"
       style={{
