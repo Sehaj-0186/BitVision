@@ -9,6 +9,19 @@ const LoadingSpinner = () => (
   <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
 );
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-2 rounded shadow-lg">
+        <p className="text-black">{label}</p>
+        <p className="text-blue-900">{`Price: $${payload[0].value}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 const TransactionChart = ({ transactions }) => {
   if (!transactions?.length) return null;
 
@@ -27,7 +40,7 @@ const TransactionChart = ({ transactions }) => {
         <LineChart data={chartData}>
           <XAxis dataKey="date" />
           <YAxis />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Line
             type="monotone"
