@@ -39,6 +39,15 @@ body {
       format("ttf");
 }
 
+@font-face {
+  font-family: "Host Grotesk";
+  font-style: normal;
+  font-weight: 100;
+  src: local("BonaNova"),
+    url("../fonts/HostGrotesk-VariableFont_wght.ttf")
+      format("ttf");
+}
+
 ::-webkit-scrollbar {
   display: none; /* Hide the scrollbar */
 }

@@ -1,11 +1,13 @@
 import { SidebarDemo } from "@/components/SidebarDemo";
+import Navbar from "./Navbar";
+import Table from "./Table";
 
 export default function NFTMarketplace() {
   return (
     <SidebarDemo>
     <div className="bg-zinc-950 h-screen w-full">
-      <h1>NFT</h1>
-      <p>Welcome to the NFTMarketplace page</p>
+     <Navbar/>
+     <Table/>
     </div>
     </SidebarDemo>
   );

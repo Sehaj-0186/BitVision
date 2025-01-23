@@ -48,7 +48,8 @@ export default function Portfolio() {
   return (
     <>
       <div className='w-[95%] mx-auto my-4 flex'>
-        <Box className="bg-black h-[400px] w-[400px] flex flex-col justify-center mx-10">
+        <div className='flex flex-col w-[30%] my-8  justify-between'>
+        <Box className="bg-black h-[50%] w-[400px] flex flex-col justify-center mx-auto">
           <div className="my-5 ml-16 text-2xl text-white">NFTs Distribution</div>
           <PieChart
             height={250}
@@ -64,33 +65,78 @@ export default function Portfolio() {
             slotProps={{ legend: { hidden: isHidden } }}
           />
         </Box>
+        <div className=' w-full h-[50%] flex flex-col items-center justify-center'>
+        <div className='grid grid-cols-2 gap-4 p-2 rounded-xl h-[60%] w-[90%] bg-zinc-950'>
+  <div className="col-span-2 "> {/* Make the title span across both columns */}
+    <h3 className="text-lg text-white px-4 py-2">NFTs Overview</h3>
+  </div>
+  <div className='rounded-lg justify-between flex flex-col p-2'>
+    <p className='text-gray-300 text-sm'>Minted:</p>
+    <p className='text-white text-3xl'>{0}</p>
+  </div>
+  <div className='rounded-lg justify-between flex flex-col p-2'>
+    <p className='text-gray-300 text-sm'>Burnt:</p>
+    <p className='text-white text-3xl'>{0}</p>
+  </div>
+  <div className='rounded-lg justify-between flex flex-col p-2'>
+    <p className='text-gray-300 text-sm'>Transferred:</p>
+    <p className='text-white text-3xl'>{0}</p>
+  </div>
+  <div className='rounded-lg justify-between flex flex-col p-2'>
+    <p className='text-gray-300 text-sm'>Received:</p>
+    <p className='text-white text-3xl'>{0}</p>
+  </div>
+</div>
+
+
+  {/* Marketplace Rewards Section */}
+  <div className="bg-zinc-950 w-[90%] mx-auto mt-4 p-4 rounded-lg">
+  <h3 className="text-lg text-white mx-3">Marketplace Rewards</h3>
+
+  <div className="mt-6 grid grid-cols-2 gap-4">
+                <div className=' h-[70px] rounded-lg  justify-between flex flex-col'>
+              <span className="text-gray-300 text-sm mt-1 ml-2">Blur:</span> 
+              
+              <span className="text-white text-3xl mb-1 ml-2">2</span>
+              </div> 
+                <div className=' h-[70px] rounded-lg  justify-between flex flex-col'>
+              <span className="text-gray-300 text-sm mt-1 ml-2">Looks:</span>
+                
+              <span className="text-white text-3xl mb-1 ml-2">$500</span> 
+              </div>
+            </div>
+  </div>
+</div>
+
+
+        </div>
 
         <div className='w-[70%] bg-black p-4 rounded-lg'>
           {/* Portfolio Performance */}
           <div className='mb-4 bg-zinc-950 p-6 rounded-2xl'>
             <h3 className='text-lg text-white mb-2 '>Portfolio Performance</h3>
             <div className='grid grid-cols-2 gap-4'>
-              <div className='bg-zinc-800 rounded-lg justify-between flex flex-col'>
+              <div className=' rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>Realized Profit:</p>
                 <p className='text-white text-3xl mb-1 ml-2'>${portfolioData.realizedProfit}</p>
               </div>
-              <div className='bg-zinc-800 rounded-lg justify-between flex flex-col'>
+              <div className=' rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>Unrealized Profit:</p>
                 <p className='text-white text-3xl mb-1 ml-2'>${portfolioData.unrealizedProfit}</p>
               </div>
-              <div className='bg-zinc-800  rounded-lg justify-between flex flex-col'>
+              <div className='  rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>Total P&L:</p>
                 <p className='text-white text-3xl mb-1 ml-2'>${portfolioData.totalPL}</p>
               </div>
-              <div className='bg-zinc-800  rounded-lg justify-between flex flex-col'>
+              <div className='  rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>Est. Portfolio Value:</p>
                 <p className='text-white text-3xl mb-1 ml-2'>${portfolioData.estimatedPortfolioValue}</p>
               </div>
-              <div className='bg-zinc-800  rounded-lg justify-between flex flex-col'>
+              <div className='  rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>Total Volume:</p>
                 <p className='text-white text-3xl mb-1 ml-2'>${portfolioData.totalVolume}</p>
               </div>
-              <div className='bg-zinc-800  rounded-lg justify-between flex flex-col'>
+              <div className='  rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>Risk Score:</p>
                 <p style={{ color: getRiskScoreColor(portfolioData.riskScore) }} 
                   className='text-white text-3xl mb-1 ml-2'>
@@ -104,19 +150,19 @@ export default function Portfolio() {
           <div className='mb-4 bg-zinc-950 p-6 rounded-2xl'>
             <h3 className='text-lg text-white mb-2'>Trading Activity</h3>
             <div className='grid grid-cols-2 gap-4'>
-              <div className='bg-zinc-800  rounded-lg justify-between flex flex-col'>
+              <div className='  rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>NFTs Bought:</p>
                 <p className='text-white text-3xl mb-1 ml-2'>{tradingActivityData.nftsBought}</p>
               </div>
-              <div className='bg-zinc-800  rounded-lg justify-between flex flex-col'>
+              <div className='  rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>NFTs Sold:</p>
                 <p className='text-white text-3xl mb-1 ml-2'>{tradingActivityData.nftsSold}</p>
               </div>
-              <div className='bg-zinc-800  rounded-lg justify-between flex flex-col'>
+              <div className='  rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>Buy Volume (in $):</p>
                 <p className='text-white text-3xl mb-1 ml-2'>${tradingActivityData.buyVolume}</p>
               </div>
-              <div className='bg-zinc-800  rounded-lg justify-between flex flex-col'>
+              <div className='  rounded-lg justify-between flex flex-col'>
                 <p className='text-gray-300 text-sm mt-1 ml-2'>Sell Volume (in $):</p>
                 <p className='text-white text-3xl mb-1 ml-2'>${tradingActivityData.sellVolume}</p>
               </div>
@@ -139,12 +185,12 @@ export default function Portfolio() {
             </div>
             {/* Wash Trade Information */}
             <div className="mt-6 grid grid-cols-2 gap-4">
-                <div className='bg-zinc-800 h-[70px] rounded-lg  justify-between flex flex-col'>
+                <div className=' h-[70px] rounded-lg  justify-between flex flex-col'>
               <span className="text-gray-300 text-sm mt-1 ml-2">Wash Traded NFTs:</span> 
               
               <span className="text-white text-3xl mb-1 ml-2">{riskAnalysis.washTradedNFTs}</span>
               </div> 
-                <div className='bg-zinc-800 h-[70px] rounded-lg  justify-between flex flex-col'>
+                <div className=' h-[70px] rounded-lg  justify-between flex flex-col'>
               <span className="text-gray-300 text-sm mt-1 ml-2">Wash Traded Volume (in $):</span>
                 
               <span className="text-white text-3xl mb-1 ml-2">${riskAnalysis.washTradedVolume}</span> 
