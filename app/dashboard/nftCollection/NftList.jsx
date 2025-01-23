@@ -4,7 +4,7 @@ import Modal from './Modal'; // Import the Modal component
 import axios from 'axios'
 
 // New component for lazy-loaded NFT card
-const NFTCard = ({ nft }) => {
+const NFTCard = ({ nft, onClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const cardRef = React.useRef();
@@ -34,7 +34,9 @@ const NFTCard = ({ nft }) => {
   return (
     <div 
       ref={cardRef}
-      className='bg-zinc-900 rounded-xl overflow-hidden shadow-lg transform transition-transform hover:scale-105'
+      onClick={() => onClick(nft)}
+      className='bg-zinc-900 rounded-xl overflow-hidden shadow-lg transform transition-transform 
+        hover:scale-105 cursor-pointer'
     >
       <div className='w-[95%] mx-auto mt-2 rounded-t-xl h-40 relative'>
         {isVisible && (
@@ -96,6 +98,7 @@ const NftList = () => {
   const [seenGifUrls, setSeenGifUrls] = useState(new Set());
 const [isModalOpen, setIsModalOpen] = useState(false);
 const [selectedNft, setSelectedNft] = useState(null);
+const [isModalDataLoading, setIsModalDataLoading] = useState(false);
   const skipCollections = [
     '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85', // ENS
     '0xb77c7520574795d4cb5766920044a2bfdea6ad1f', // X-Y-Z
@@ -263,9 +266,60 @@ const [selectedNft, setSelectedNft] = useState(null);
     setSelectedNft(null);
   };
 
-  const handleCardClick = (nft) => {
-    setSelectedNft(nft);
+  const handleCardClick = async (nft) => {
+    // Show modal immediately with loading state
+    setSelectedNft({
+      ...nft,
+      currentPrice: null,
+      floorPrice: null,
+      allTimeHigh: null,
+      allTimeLow: null,
+      totalTransactions: null,
+      sales: null,
+      totalTransfers: null,
+      volume: null,
+      suspectTransactions: null,
+      connectedWallets: null,
+      washTradeVolume: null,
+      washTradeStatus: null
+    });
     setIsModalOpen(true);
+    setIsModalDataLoading(true);
+
+    try {
+      const analyticsResponse = await axios.get("/api/nftanalytics", {
+        params: {
+          contract_address: nft.contract_address,
+          token_id: nft.token_id,
+          blockchain: "ethereum"
+        }
+      });
+
+      setSelectedNft(prev => ({
+        ...prev,
+        ...analyticsResponse.data
+      }));
+    } catch (error) {
+      console.error("Error fetching NFT details:", error);
+      // Update with default values on error
+      setSelectedNft(prev => ({
+        ...prev,
+        currentPrice: "Not Available",
+        floorPrice: "0",
+        allTimeHigh: "0",
+        allTimeLow: "0",
+        totalTransactions: "0",
+        sales: "0",
+        totalTransfers: "0",
+        volume: "0",
+        suspectTransactions: "0",
+        connectedWallets: "0",
+        washTradeVolume: "0",
+        washTradeStatus: "Clear"
+      }));
+    } finally {
+      setIsModalDataLoading(false);
+    }
   };
 
   // Helper function to generate unique key
@@ -455,7 +509,11 @@ const [selectedNft, setSelectedNft] = useState(null);
           </div>
         ) : (
           displayedNftData.map((nft) => (
-            <NFTCard key={nft.id} nft={nft} />
+            <NFTCard 
+              key={nft.id} 
+              nft={nft} 
+              onClick={handleCardClick}
+            />
           ))
         )}
       </div>
@@ -510,7 +568,7 @@ const [selectedNft, setSelectedNft] = useState(null);
       <div ref={sentinelRef} className="h-10" />
 
       {/* Render Modal */}
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} nft={selectedNft} />
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} nft={selectedNft} isLoading={isModalDataLoading} />
     </div>
   );;
 };
