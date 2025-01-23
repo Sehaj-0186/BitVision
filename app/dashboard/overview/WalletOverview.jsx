@@ -1,6 +1,6 @@
-'use client'
-import React from 'react'
-import { useAccount, useBalance } from 'wagmi'
+'use client';
+import React, { useState } from 'react';
+import { useAccount, useBalance } from 'wagmi';
 import { 
   Wallet, 
   CreditCard, 
@@ -8,24 +8,28 @@ import {
   AlertTriangle, 
   Layers,
   Landmark 
-} from 'lucide-react'
+} from 'lucide-react';
+import Toast from '@/components/Toast'; 
 
 const WalletOverview = () => {
-  const { address, isConnected, connector } = useAccount()
-  const { data: balanceData } = useBalance({ address })
+  const { address, isConnected } = useAccount();
+  const { data: balanceData } = useBalance({ address });
+  
+  const [showToast, setShowToast] = useState(false); 
 
-  // Copy wallet address to clipboard
   const copyAddress = () => {
     if (address) {
-      navigator.clipboard.writeText(address)
-      alert('Wallet address copied!')
+      navigator.clipboard.writeText(address);
+      setShowToast(true); 
+      setTimeout(() => setShowToast(false), 3000); 
     }
-  }
+  };
 
   return (
     <div className='w-[95%] mx-auto rounded-xl bg-zinc-950 h-40 my-8 flex'>
+      {showToast && <Toast message="Wallet Address Copied!" onClose={() => setShowToast(false)} />} 
 
-      <div className='w-1/2  p-4 flex items-center'>
+      <div className='w-1/2 p-4 flex items-center'>
         <div className='flex items-center space-x-4'>
           {isConnected ? (
             <Landmark className="w-16 h-16 text-blue-500" />
@@ -51,7 +55,6 @@ const WalletOverview = () => {
         </div>
       </div>
 
-
       <div className='w-1/2 flex space-x-4 p-4'>
         <div className='flex-1 bg-zinc-900 rounded-lg p-4 flex flex-col justify-between'>
           <div className='flex justify-between items-center'>
@@ -74,7 +77,7 @@ const WalletOverview = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default WalletOverview
+export default WalletOverview;

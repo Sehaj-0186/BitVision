@@ -266,7 +266,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
     setSelectedNft(null);
   };
 
-  const handleCardClick = async (nft) => {
+    const handleCardClick = async (nft) => {
     // Show modal immediately with loading state
     setSelectedNft({
       ...nft,
