@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import { 
   Wallet, 
@@ -9,13 +9,40 @@ import {
   Layers,
   Landmark 
 } from 'lucide-react';
+import { CircularProgress } from '@mui/material';
 import Toast from '@/components/Toast'; 
 
 const WalletOverview = () => {
   const { address, isConnected } = useAccount();
-  const { data: balanceData } = useBalance({ address });
+  const { data: balanceData, isLoading: isBalanceLoading } = useBalance({ address });
   
   const [showToast, setShowToast] = useState(false); 
+  const [portfolioValue, setPortfolioValue] = useState(0);
+  const [nftCount, setNftCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchWalletScores = async (walletAddress) => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`/api/nftscore?wallet=${walletAddress}`);
+      const data = await response.json();
+      
+      if (data.data && data.data[0]) {
+        setPortfolioValue(data.data[0].portfolio_value || 0);
+        setNftCount(data.data[0].nft_count || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching wallet scores:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isConnected && address) {
+      fetchWalletScores(address);
+    }
+  }, [isConnected, address]);
 
   const copyAddress = () => {
     if (address) {
@@ -48,7 +75,11 @@ const WalletOverview = () => {
             </div>
             <div className='text-gray-400'>
               {isConnected 
-                ? `Balance: $${balanceData?.formatted || '0'}`
+                ? (
+                  isBalanceLoading
+                    ? <CircularProgress size={24} />
+                    : `$${balanceData?.formatted || '0'}`
+                )
                 : 'Balance: $0'}
             </div>
           </div>
@@ -62,7 +93,13 @@ const WalletOverview = () => {
             <span className='text-white font-thin'>NFT Value</span>
           </div>
           <div className='text-right text-4xl text-white'>
-            {isConnected ? `$${balanceData?.formatted || '0'}` : '$0'}
+            {isConnected 
+              ? (
+                isLoading
+                  ? <CircularProgress size={24} />
+                  : `$${portfolioValue.toFixed(2) || '0'}`
+              )
+              : '$0'}
           </div>
         </div>
 
@@ -72,7 +109,13 @@ const WalletOverview = () => {
             <span className='text-white font-thin'>NFTs Held</span>
           </div>
           <div className='text-right text-4xl text-white'>
-            0
+            {isConnected
+              ? (
+                isLoading
+                  ? <CircularProgress size={24} />
+                  : nftCount.toString()
+              )
+              : '0'}
           </div>
         </div>
       </div>
