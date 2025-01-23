@@ -12,7 +12,8 @@ export default {
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        cinzel: ["Cinzel"]
+        cinzel: ["Cinzel"],
+        bonaNova: ["BonaNova"],
       }
     },
     "animation": {

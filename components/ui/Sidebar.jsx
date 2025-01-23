@@ -61,18 +61,35 @@ export const DesktopSidebar = ({
   const { open, setOpen, animate } = useSidebar();
   return (<>
     <motion.div
-      className={cn(
-        "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0",
-        className
-      )}
-      animate={{
-        width: animate ? (open ? "300px" : "60px") : "300px",
-      }}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-      {...props}>
-      {children}
-    </motion.div>
+  className={cn(
+    "h-full px-4 py-4 hidden  md:flex md:flex-col bg-black w-[300px] flex-shrink-0 relative",
+    className
+  )}
+  animate={{
+    width: animate ? (open ? "300px" : "60px") : "300px",
+  }}
+  onMouseEnter={() => setOpen(true)}
+  onMouseLeave={() => setOpen(false)}
+  {...props}
+>
+  {/* Gradient border as a pseudo-element */}
+  <div
+    className="absolute inset-0 rounded-2xl"
+    style={{
+      background: "linear-gradient(to bottom, #fc30e1, #3052fc)",
+      WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+      WebkitMaskComposite: "destination-out",
+      maskComposite: "exclude",
+      paddingRight: "1px", // Adjust to control border thickness
+    }}
+  ></div>
+  {/* Content */}
+  <div className="relative z-10 rounded-2xl bg-black h-full flex flex-col">
+    {children}
+  </div>
+</motion.div>
+
+
   </>);
 };
 
@@ -85,7 +102,7 @@ export const MobileSidebar = ({
   return (<>
     <div
       className={cn(
-        "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+        "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between  bg-zinc-950 w-full"
       )}
       {...props}>
       <div className="flex justify-end z-20 w-full">
@@ -129,7 +146,7 @@ export const SidebarLink = ({
   return (
     (<Link
       href={link.href}
-      className={cn("flex items-center justify-start gap-2  group/sidebar py-2", className)}
+      className={cn("flex items-center  transition duration-800 ease-in-out  rounded-md justify-start gap-2  group/sidebar py-2", className)}
       {...props}>
       {link.icon}
       <motion.span
@@ -137,7 +154,7 @@ export const SidebarLink = ({
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
         }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
+        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block px-2 !m-0">
         {link.label}
       </motion.span>
     </Link>)

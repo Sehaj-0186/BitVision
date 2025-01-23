@@ -28,3 +28,16 @@ body {
     url("../fonts/Cinzel-VariableFont_wght.ttf")
       format("ttf");
 }
+
+@font-face {
+  font-family: "BonaNova";
+  font-style: normal;
+  font-weight: 100;
+  src: local("BonaNova"),
+    url("../fonts/BonaNovaSC-Regular.ttf")
+      format("ttf");
+}
+
+::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar */
+}

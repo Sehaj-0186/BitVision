@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Navbar from "./Navbar";
-import bg from "../images/mjy11.jpg";
+import bg from "../images/bgLandingPage.jpg";
 import Image from "next/image";
 import Hero from "./Hero";
 import { useAppContext } from "@/components/context";
