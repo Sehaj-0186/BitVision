@@ -60,17 +60,42 @@ const NFTCard = ({ nft, onClick }) => {
   );
 };
 
-const LoadingSpinner = () => (
-  <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white ml-2"></div>
-);
+const LoadingSpinner = () => {
+  const [rotation, setRotation] = useState(0);
 
-// Add new loading card component
-const LoadingCard = () => (
-  <div className="bg-zinc-900 rounded-xl overflow-hidden shadow-lg animate-pulse">
-    <div className='w-[95%] mx-auto mt-2 rounded-t-xl h-40 bg-zinc-800'/>
-    <div className='p-3'>
-      <div className="h-4 bg-zinc-800 rounded w-3/4 mx-auto"/>
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation(prev => (prev + 45) % 360);
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div 
+      className="relative inline-flex items-center justify-center w-6 h-6 group"
+      style={{ transform: `rotate(${rotation}deg)` }}
+      title="Loading..."
+    >
+      <div className="absolute inset-0 rounded-full border-2 border-t-white border-r-gray-300 
+        border-b-gray-500 border-l-gray-300 group-hover:border-t-orange-400 
+        transition-colors duration-300">
+      </div>
+      <div className="w-2 h-2 bg-white rounded-full group-hover:bg-orange-400 
+        transition-colors duration-300">
+      </div>
     </div>
+  );
+};
+
+ const LoadingLine = () => (
+  <div className="fixed top-0 left-0 right-0 h-1 overflow-hidden">
+    <div 
+      className="h-full w-full animate-gradient-x"
+      style={{
+        background: 'linear-gradient(to right, #fc30e1, #3052fc)',
+        animation: 'moveGradient 2s infinite linear'
+      }}
+    />
   </div>
 );
 
@@ -488,13 +513,10 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
 
   if (isLoading) {
     return (
-      <div className='w-[95%] mx-auto bg-zinc-950 h-[calc(100vh-150px)] p-4'>
-        <div className='text-3xl font-thin my-5 text-gray-400'>NFT List</div>
-        <div className='grid grid-cols-6 gap-6'>
-          {[...Array(12)].map((_, i) => (
-            <LoadingCard key={i} />
-          ))}
-        </div>
+      <div className="w-[95%] mx-auto bg-zinc-950 h-[calc(100vh-150px)] p-4 flex flex-col items-center justify-center text-white">
+        <LoadingSpinner />
+        <p className="mt-4 text-lg animate-bounce">Loading your NFTs... Please wait!</p>
+       
       </div>
     );
   }
@@ -520,12 +542,10 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
 
       {/* Centered button container */}
       <div className="flex justify-center gap-4 mt-8 pb-4">
-        {/* Loading state container */}
         {(isLoadingTokens || isLoadingContract) && (
-          <div className="fixed top-0 left-0 right-0 bg-orange-400 h-1">
-            <div className="h-full bg-orange-600 animate-progress" style={{width: '75%'}}/>
-          </div>
-        )}
+        <LoadingLine/>
+      )}
+      
 
         {/* Buttons with improved styling */}
         {uniqueTokenCount < totalCollectionTokens && (
@@ -558,7 +578,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
         )}
       </div>
 
-      {/* Progress indicator */}
+      
       {!isLoading && displayedNftData.length > 0 && (
         <div className="text-center text-gray-400 mt-4">
           Showing {displayedNftData.length} of {allNftData.length} NFTs
@@ -570,7 +590,9 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
       {/* Render Modal */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} nft={selectedNft} isLoading={isModalDataLoading} />
     </div>
-  );;
-};
+  );
+}
 
-export default NftList;;
+export default NftList;
+
+

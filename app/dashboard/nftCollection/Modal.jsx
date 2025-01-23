@@ -1,12 +1,29 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const LoadingValue = () => (
   <span className="inline-block h-6 w-24 bg-zinc-700 animate-pulse rounded" />
 );
 
 const LoadingSpinner = () => (
-  <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
+  <div className="relative inline-block h-9 w-9">
+    <div 
+      className="absolute inset-0 rounded-full animate-spin "
+      style={{
+        background: 'linear-gradient(to bottom, #fc30e1, #3052fc)',
+        maskImage: 'radial-gradient(transparent 65%, black 65%)',
+        WebkitMaskImage: 'radial-gradient(transparent 65%, black 65%)',
+      }}
+    ></div>
+  </div>
 );
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -26,12 +43,12 @@ const TransactionChart = ({ transactions }) => {
   if (!transactions?.length) return null;
 
   const chartData = transactions
-    .filter(tx => tx.price > 0) // Only show transactions with price
+    .filter((tx) => tx.price > 0) // Only show transactions with price
     .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .map(tx => ({
+    .map((tx) => ({
       date: new Date(tx.date).toLocaleDateString(),
       price: tx.price,
-      isWashTrade: tx.isWashTrade
+      isWashTrade: tx.isWashTrade,
     }));
 
   return (
@@ -66,7 +83,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
 
   const formatValue = (value) => {
     if (isLoading) return <LoadingValue />;
-    return value || 'Not Available';
+    return value || "Not Available";
   };
 
   return (
@@ -98,9 +115,11 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
         <div className="w-2/3 p-5 overflow-y-auto">
           {/* Loading Indicator */}
           {isLoading && (
-            <div className="absolute top-4 right-4">
-              <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
-              <span className="ml-2 text-orange-500">Loading data...</span>
+            <div className="absolute top-4 right-4 flex items-center gap-2">
+              <LoadingSpinner />
+              <span className="animate-pulse text-orange-500">
+                Fetching NFT Details...
+              </span>
             </div>
           )}
 
@@ -206,15 +225,19 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
             </h3>
             <div className="grid grid-cols-2 gap-4 bg-zinc-800 p-4 rounded-lg">
               <div>
-                <p className="text-gray-300">Estimated Price:</p>
+                <p className="text-gray-300">Estimated Price (eth):</p>
                 <p className="text-white">
-                  {`eth ${Number(nft.priceEstimate?.estimate || 0).toFixed(4)}`}
+                  {`${Number(nft.priceEstimate?.estimate || 0).toFixed(4)}`}
                 </p>
               </div>
               <div>
-                <p className="text-gray-300">Price Range:</p>
+                <p className="text-gray-300">Price Range(eth):</p>
                 <p className="text-white">
-                  {`eth ${Number(nft.priceEstimate?.lowerBound || 0).toFixed(4)} - eth ${Number(nft.priceEstimate?.upperBound || 0).toFixed(4)}`}
+                  {` ${Number(nft.priceEstimate?.lowerBound || 0).toFixed(
+                    4
+                  )} - ${Number(nft.priceEstimate?.upperBound || 0).toFixed(
+                    4
+                  )}`}
                 </p>
               </div>
               <div>
@@ -242,8 +265,12 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
                 <div className="h-[300px] flex items-center justify-center">
                   <LoadingSpinner />
                 </div>
-              ) : (
+              ) : nft.transactions?.length ? (
                 <TransactionChart transactions={nft.transactions} />
+              ) : (
+                <div className="h-[300px] flex items-center justify-center text-gray-400">
+                  No transaction history available
+                </div>
               )}
             </div>
           </div>

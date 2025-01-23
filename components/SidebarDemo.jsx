@@ -6,18 +6,18 @@ import {
   IconLibrary,
   IconUserBolt,
   IconBuildingStore,
-  IconBrandGithub, 
+  IconBrandGithub,
   IconCircleArrowRight,
   IconBrandInstagram,
   IconBrandX,
   IconBrandFacebook,
-  IconBrandDiscord
+  IconBrandDiscord,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import  SiteLogo  from "../images/logo1.png"
+import SiteLogo from "../images/logo1.png";
 
 export function SidebarDemo({ children }) {
   const links = [
@@ -29,7 +29,7 @@ export function SidebarDemo({ children }) {
       ),
     },
     {
-      label: "NFT Collection",
+      label: "My NFTs",
       href: "/dashboard/nftCollection",
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
@@ -70,54 +70,53 @@ export function SidebarDemo({ children }) {
             </div>
           </div>
           <div>
-
             {open ? (
               <>
-              <div>Visit Us :)</div>
-              <div className="flex gap-1">
-                <SidebarLink
-                  link={{
-                    href: "https://github.com/Sehaj-0186/NFTnexus",
-                    icon: (
-                      <IconBrandGithub className="text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0 hover:text-white" />
-                    ),
-                    target: "_blank", 
-                    rel: "noopener noreferrer", 
-                  }}
-                />
-                <SidebarLink
-                  link={{
-                    href: "#",
-                    icon: (
-                      <IconBrandInstagram className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0 " />
-                    ),
-                  }}
-                />
-                 <SidebarLink
-                  link={{
-                    href: "#",
-                    icon: (
-                      <IconBrandX className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
-                    ),
-                  }}
-                />
-                <SidebarLink
-                  link={{
-                    href: "#",
-                    icon: (
-                      <IconBrandFacebook className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
-                    ),
-                  }}
-                />
-                <SidebarLink
-                  link={{
-                    href: "#",
-                    icon: (
-                      <IconBrandDiscord className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
-                    ),
-                  }}
-                />
-              </div>
+                <div>Visit Us :)</div>
+                <div className="flex gap-1">
+                  <SidebarLink
+                    link={{
+                      href: "https://github.com/Sehaj-0186/NFTnexus",
+                      icon: (
+                        <IconBrandGithub className="text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0 hover:text-white" />
+                      ),
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    }}
+                  />
+                  <SidebarLink
+                    link={{
+                      href: "#",
+                      icon: (
+                        <IconBrandInstagram className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0 " />
+                      ),
+                    }}
+                  />
+                  <SidebarLink
+                    link={{
+                      href: "#",
+                      icon: (
+                        <IconBrandX className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
+                      ),
+                    }}
+                  />
+                  <SidebarLink
+                    link={{
+                      href: "#",
+                      icon: (
+                        <IconBrandFacebook className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
+                      ),
+                    }}
+                  />
+                  <SidebarLink
+                    link={{
+                      href: "#",
+                      icon: (
+                        <IconBrandDiscord className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
+                      ),
+                    }}
+                  />
+                </div>
               </>
             ) : (
               <SidebarLink
@@ -141,26 +140,22 @@ export function SidebarDemo({ children }) {
 
 export const Logo = () => {
   return (
-    (<div
-      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20">
-      <Image src={SiteLogo} alt="logo" 
-        className="h-8 w-9 flex-shrink-0" />
+    <div className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20">
+      <Image src={SiteLogo} alt="logo" className="h-8 w-9 flex-shrink-0" />
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="font-medium text-black dark:text-white whitespace-pre font-cinzel">
+        className="font-medium text-black dark:text-white whitespace-pre font-cinzel"
+      >
         NFTnexus
       </motion.span>
-    </div>)
+    </div>
   );
 };
 export const LogoIcon = () => {
   return (
-    (<div
-      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20">
-      <Image src={SiteLogo} alt="logo" 
-        className="h-6 w-7 flex-shrink-0" />
-    </div>)
+    <div className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20">
+      <Image src={SiteLogo} alt="logo" className="h-6 w-7 flex-shrink-0" />
+    </div>
   );
 };
-

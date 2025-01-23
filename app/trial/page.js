@@ -22,41 +22,7 @@ export default function page() {
       }
     }
 
-    async function fetchWalletAnalysis() {
-      setIsLoading(true);
-      try {
-        const params = {
-          wallet: "0x7c1958Ba95AB3170f6069DADF4de304B0c00000C",
-          blockchain: "ethereum",
-          time_range: "24h",
-          sort_by: "volume",
-          sort_order: "desc"
-        };
-        const response = await axios.get("/api/walletanalysis", { params });
-        
-        // Updated to handle the new response structure
-        const processedData = response.data.data.map(item => ({
-          blockchain: item.blockchain,
-          buy_volume: item.buy_volume || 0,
-          minted_value: item.minted_value || 0,
-          nft_bought: item.nft_bought || 0,
-          nft_burn: item.nft_burn || 0,
-          nft_mint: item.nft_mint || 0,
-          nft_sold: item.nft_sold || 0,
-          nft_transfer: item.nft_transfer || 0,
-          sales: item.sales || 0,
-          sell_volume: item.sell_volume || 0,
-          transactions: item.transactions || 0,
-          transfers: item.transfers || 0,
-        }));
-        
-        setWalletDataList(processedData);
-      } catch (error) {
-        console.error("Error fetching wallet analysis:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+   
 
     fetchPortfolio();
     fetchWalletAnalysis();

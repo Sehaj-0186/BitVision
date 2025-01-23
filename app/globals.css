@@ -59,3 +59,14 @@ body {
 .animate-progress {
   animation: progress 2s ease-in-out infinite;
 }
+
+
+@keyframes moveGradient {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-gradient-x {
+  background-size: 200% 100%;
+  animation: moveGradient 2s infinite linear;
+}
