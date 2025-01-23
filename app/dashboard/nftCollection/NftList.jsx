@@ -61,6 +61,16 @@ const LoadingSpinner = () => (
   <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white ml-2"></div>
 );
 
+// Add new loading card component
+const LoadingCard = () => (
+  <div className="bg-zinc-900 rounded-xl overflow-hidden shadow-lg animate-pulse">
+    <div className='w-[95%] mx-auto mt-2 rounded-t-xl h-40 bg-zinc-800'/>
+    <div className='p-3'>
+      <div className="h-4 bg-zinc-800 rounded w-3/4 mx-auto"/>
+    </div>
+  </div>
+);
+
 const NftList = () => {
   const [collectionsArray, setCollectionsArray] = useState([]);
   const [currentCollectionIndex, setCurrentCollectionIndex] = useState(0);
@@ -412,52 +422,82 @@ const NftList = () => {
 
   if (isLoading) {
     return (
-      <div className='w-[95%] mx-auto bg-zinc-950 h-[50vh] flex justify-center items-center'>
-        <span className='text-white'>Loading NFTs...</span>
+      <div className='w-[95%] mx-auto bg-zinc-950 h-[calc(100vh-150px)] p-4'>
+        <div className='text-3xl font-thin my-5 text-gray-400'>NFT List</div>
+        <div className='grid grid-cols-6 gap-6'>
+          {[...Array(12)].map((_, i) => (
+            <LoadingCard key={i} />
+          ))}
+        </div>
       </div>
     )
   }
 
   return (
     <div className='w-[95%] mx-auto bg-zinc-950 h-[calc(100vh-150px)] overflow-y-auto p-4'>
-      <div className='text-3xl font-thin my-5'>NFT List</div>
-      <div className='grid grid-cols-6 gap-6'>
-        {displayedNftData.map((nft) => (
-          <NFTCard key={nft.id} nft={nft} />
-        ))}
+      <div className='text-3xl font-thin my-5 text-gray-400'>NFT List</div>
+      <div className='grid grid-cols-6 gap-6 min-h-[300px]'>
+        {displayedNftData.length === 0 ? (
+          <div className="col-span-6 flex justify-center items-center h-64 text-gray-400">
+            No NFTs found in this collection
+          </div>
+        ) : (
+          displayedNftData.map((nft) => (
+            <NFTCard key={nft.id} nft={nft} />
+          ))
+        )}
       </div>
-      <div className="flex gap-4 mt-4">
-        {/* Show Load More Tokens button if there are more tokens to load in current collection */}
+
+      {/* Centered button container */}
+      <div className="flex justify-center gap-4 mt-8 pb-4">
+        {/* Loading state container */}
+        {(isLoadingTokens || isLoadingContract) && (
+          <div className="fixed top-0 left-0 right-0 bg-orange-400 h-1">
+            <div className="h-full bg-orange-600 animate-progress" style={{width: '75%'}}/>
+          </div>
+        )}
+
+        {/* Buttons with improved styling */}
         {uniqueTokenCount < totalCollectionTokens && (
           <button 
             onClick={handleLoadMoreTokens}
             disabled={isLoadingTokens || isLoadingContract}
-            className={`bg-green-500 text-white p-2 flex items-center ${
-              (isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`px-6 py-3 bg-gradient-to-r from-orange-400 to-pink-500 rounded-lg
+              font-semibold text-white shadow-lg transform transition-all
+              hover:scale-105 active:scale-95 flex items-center gap-2
+              ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
           >
-            Load More Tokens ({uniqueTokenCount}/{totalCollectionTokens} Unique)
+            Load More Tokens ({uniqueTokenCount}/{totalCollectionTokens})
             {isLoadingTokens && <LoadingSpinner />}
           </button>
         )}
-        {/* Show Load Next Contract button if all tokens in current collection are loaded */}
+        
         {uniqueTokenCount >= totalCollectionTokens && 
          currentCollectionIndex < collectionsArray.length - 1 && (
           <button 
             onClick={handleLoadNextContract}
             disabled={isLoadingTokens || isLoadingContract}
-            className={`bg-blue-500 text-white p-2 flex items-center ${
-              (isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg
+              font-semibold text-white shadow-lg transform transition-all
+              hover:scale-105 active:scale-95 flex items-center gap-2
+              ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
           >
-            Load Next Contract
+            Load Next Collection
             {isLoadingContract && <LoadingSpinner />}
           </button>
         )}
       </div>
+
+      {/* Progress indicator */}
+      {!isLoading && displayedNftData.length > 0 && (
+        <div className="text-center text-gray-400 mt-4">
+          Showing {displayedNftData.length} of {allNftData.length} NFTs
+        </div>
+      )}
+      
       <div ref={sentinelRef} className="h-10" />
     </div>
   );
 }
 
-export default NftList
+export default NftList;

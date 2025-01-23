@@ -41,3 +41,11 @@ body {
 ::-webkit-scrollbar {
   display: none; /* Hide the scrollbar */
 }
+@keyframes progress {
+  0% { width: 0; }
+  100% { width: 75%; }
+}
+
+.animate-progress {
+  animation: progress 2s ease-in-out infinite;
+}
