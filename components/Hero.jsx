@@ -2,13 +2,18 @@
 import React, { useState } from "react";
 import { useAppContext } from "@/components/context";
 import { useRouter } from "next/navigation";
+import { useAccount } from "wagmi";
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { setIsClicked } = useAppContext();
-  const router=useRouter();
+  const router = useRouter();
+  const { isConnected } = useAccount();
 
   const handleClick = () => {
+    if (!isConnected) {
+      return; // Early return if wallet not connected
+    }
     setIsClicked(true);
     router.push("/dashboard/overview");
   };
@@ -32,19 +37,26 @@ const Hero = () => {
       </div>
       <div className="mt-4 relative">
         <div
-          className={`absolute bottom-[120%] text-center w-64 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-gray-200 text-gray-800 text-sm rounded opacity-0 pointer-events-none transition-opacity duration-500 ${
+          className={`absolute bottom-[120%] text-center w-64 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-gray-800 text-gray-200 text-sm rounded opacity-0 pointer-events-none transition-opacity duration-500 ${
             isHovered ? "opacity-100" : ""
           }`}
         >
-          Make sure your wallet is connected!
+          {!isConnected
+            ? "Please connect your wallet using the button above"
+            : "Click to get started!"}
         </div>
         <button
-          className="bg-transparent border-[1px] border-gray-600 rounded-md px-6 py-2 text-gray-300"
+          className={`bg-transparent border-[1px] border-gray-600 rounded-md px-6 py-2 text-gray-300 transition-all duration-300 ${
+            !isConnected
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-gray-800 hover:border-gray-400"
+          }`}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={handleClick}
+          disabled={!isConnected}
         >
-          Get Started!
+          {!isConnected ? "Connect Wallet First" : "Get Started!"}
         </button>
       </div>
     </div>

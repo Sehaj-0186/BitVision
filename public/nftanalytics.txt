@@ -49,3 +49,24 @@
       "washtrade_volume_change": 0,
       "washtrade_wallets": 2,
       "washtrade_wallets_change": 0
+
+
+
+      Wash Trading Risk:
+
+Deduct 40 points if wash trading is detected
+
+
+Suspect Sales Activity:
+
+Deduct 15 points if suspicious sales activity is detected
+
+
+Number of Unique Wallet Holders:
+
+Deduct 15 points if the number of unique wallet holders is low
+
+
+Floor Price:
+
+Deduct 10 points if the floor price is zero
