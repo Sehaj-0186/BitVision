@@ -5,7 +5,7 @@ import Table from "./Table";
 export default function NFTMarketplace() {
   return (
     <SidebarDemo>
-    <div className="bg-zinc-950 h-screen w-full">
+    <div className="bg-black h-screen w-full">
      <Navbar/>
      <Table/>
     </div>
