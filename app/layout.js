@@ -3,6 +3,7 @@ import "./globals.css";
 import Providers from "./providers";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppWrapper } from "../components/context";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
       >
         <AppWrapper>
           <Providers>{children}</Providers>
+          
         </AppWrapper>
       </body>
     </html>

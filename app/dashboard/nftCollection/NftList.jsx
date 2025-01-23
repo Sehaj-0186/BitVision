@@ -1,5 +1,6 @@
 'use client'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
+import Modal from './Modal'; // Import the Modal component
 import axios from 'axios'
 
 // New component for lazy-loaded NFT card
@@ -93,7 +94,8 @@ const NftList = () => {
   const [uniqueTokenCount, setUniqueTokenCount] = useState(0);
   const [totalCollectionTokens, setTotalCollectionTokens] = useState(0);
   const [seenGifUrls, setSeenGifUrls] = useState(new Set());
-
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [selectedNft, setSelectedNft] = useState(null);
   const skipCollections = [
     '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85', // ENS
     '0xb77c7520574795d4cb5766920044a2bfdea6ad1f', // X-Y-Z
@@ -255,6 +257,16 @@ const NftList = () => {
       setIsLoadingContract(false);
     }
   }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedNft(null);
+  };
+
+  const handleCardClick = (nft) => {
+    setSelectedNft(nft);
+    setIsModalOpen(true);
+  };
 
   // Helper function to generate unique key
   const generateUniqueKey = (contractAddress, tokenId) => {
@@ -430,7 +442,7 @@ const NftList = () => {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -496,8 +508,11 @@ const NftList = () => {
       )}
       
       <div ref={sentinelRef} className="h-10" />
-    </div>
-  );
-}
 
-export default NftList;
+      {/* Render Modal */}
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} nft={selectedNft} />
+    </div>
+  );;
+};
+
+export default NftList;;
