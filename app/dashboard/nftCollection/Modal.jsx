@@ -8,23 +8,21 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { ShieldCheck, ShieldAlert } from 'lucide-react';
+import "./spinner.css";
 
 const LoadingValue = () => (
   <span className="inline-block h-6 w-24 bg-zinc-700 animate-pulse rounded" />
 );
 
-const LoadingSpinner = () => (
-  <div className="relative inline-block h-9 w-9">
-    <div 
-      className="absolute inset-0 rounded-full animate-spin "
-      style={{
-        background: 'linear-gradient(to bottom, #fc30e1, #3052fc)',
-        maskImage: 'radial-gradient(transparent 65%, black 65%)',
-        WebkitMaskImage: 'radial-gradient(transparent 65%, black 65%)',
-      }}
-    ></div>
-  </div>
-);
+  const LoadingSpinner = () => {
+    return (
+      <div className="spinner-container justify-end flex h-20 items-center">
+        <div className="rotating-gradient"></div>
+      </div>
+    );
+  };
+
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -37,6 +35,11 @@ const CustomTooltip = ({ active, payload, label }) => {
   }
 
   return null;
+};
+
+const shortenAddress = (address) => {
+    if (!address || address.length <= 8) return address; // Return original if too short
+    return `${address.slice(0, 4)}...${address.slice(-4)}`;
 };
 
 const TransactionChart = ({ transactions }) => {
@@ -98,28 +101,35 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
         </button>
 
         {/* Left Section */}
-        <div className="w-1/3 p-5 flex flex-col items-center">
+        <div className="w-1/3 p-8 flex flex-col items-center">
           <img
             src={nft.image}
             alt={nft.name}
-            className="w-50 h-50 rounded-xl mb-5 object-cover"
+            className="w-60 h-60 rounded-xl mb-5 object-cover"
           />
+          
           <h2 className="text-xl text-white font-bold mb-2">{nft.name}</h2>
-          <p className="text-gray-300 mb-1">Collection:</p>
-          <div className="text-white mb-3">
-            <a href={`https://eth.nftscan.com/${nft.contract_address}`}>{formatValue(nft.collection)}</a>
-            </div>
-          <p className="text-gray-300 mb-1">Token ID:</p>
+          <div className="flex">
+    <p className="text-gray-300 mb-1 mx-1">Contract Address:</p>
+    <div className="text-white mb-3 hover:underline">
+        <a href={`https://eth.nftscan.com/${nft.contract_address}`}>
+            {formatValue(shortenAddress(nft.contract_address))}
+        </a>
+    </div>
+</div>
+         <div className="flex">
+          <p className="text-gray-300 mb-1 mx-1">Token ID:</p>
           <p className="text-white">{formatValue(nft.token_id)}</p>
+          </div>
         </div>
 
         {/* Right Section with Loading State */}
-        <div className="w-2/3 p-5 overflow-y-auto">
+        <div className="w-2/3 h-[90%] my-auto p-5 overflow-y-auto">
           {/* Loading Indicator */}
           {isLoading && (
-            <div className="absolute top-4 right-4 flex items-center gap-2">
+            <div className="absolute top-4 right-7 flex items-center gap-2">
               <LoadingSpinner />
-              <span className="animate-pulse text-orange-500">
+              <span className="animate-pulse text-gray-200">
                 Fetching NFT Details...
               </span>
             </div>
@@ -127,10 +137,10 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
 
           {/* Price Analysis */}
           <div className="mb-5">
-            <h3 className="text-lg text-white font-semibold mb-2">
+            <h3 className="text-xl text-white font-semibold mb-2">
               Price Analysis
             </h3>
-            <div className="grid grid-cols-2 gap-4 bg-zinc-800 p-4 rounded-lg">
+            <div className="grid grid-cols-2 gap-4 bg-zinc-900 p-4 rounded-lg">
               <div>
                 <p className="text-gray-300">Current Price:</p>
                 <p className="text-white">$ {formatValue(nft.currentPrice)}</p>
@@ -152,10 +162,10 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
 
           {/* Trading Activity */}
           <div className="mb-5">
-            <h3 className="text-lg text-white font-semibold mb-2">
+            <h3 className="text-xl text-white font-semibold mb-2">
               Trading Activity
             </h3>
-            <div className="grid grid-cols-2 gap-4 bg-zinc-800 p-4 rounded-lg">
+            <div className="grid grid-cols-2 gap-4 bg-zinc-900 p-4 rounded-lg">
               <div>
                 <p className="text-gray-300">Total Transactions:</p>
                 <p className="text-white">
@@ -178,11 +188,11 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
           </div>
 
           {/* Wash Trade Analysis */}
-          <div>
-            <h3 className="text-lg text-white font-semibold mb-2">
+          <div className="mb-5">
+            <h3 className="text-xl text-white font-semibold mb-2">
               Wash Trade Analysis
             </h3>
-            <div className="grid grid-cols-2 gap-4 bg-zinc-800 p-4 rounded-lg">
+            <div className="grid grid-cols-2 gap-4 bg-zinc-900 p-4 rounded-lg">
               <div>
                 <p className="text-gray-300">Suspected Transactions:</p>
                 <p className="text-white">
@@ -204,17 +214,17 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
 
               {/* Status with conditional styling */}
               <div
-                className={`rounded-lg p-3 ${
+                className={`rounded-lg p-3 flex ${
                   nft.washTradeStatus === "Active"
-                    ? "bg-red-600"
-                    : "bg-green-600"
+                    ? "bg-zinc-800 border-red-600 border-[1px]"
+                    : "bg-zinc-800 border-green-600 border-[1px]"
                 }`}
               >
-                <span>Status:</span>{" "}
+                <span className="mr-2"> Status:</span>{" "}
                 {nft.washTradeStatus === "Active" ? (
-                  <> 🚩 {<span>Suspicious</span>}</>
+                  <> <ShieldAlert color="red"/> {<span>Suspicious</span>}</>
                 ) : (
-                  <> ✅ {<span>Clear</span>}</>
+                  <> <ShieldCheck color="green"/> {<span >Clear</span>}</>
                 )}
               </div>
             </div>
@@ -222,10 +232,10 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
 
           {/* Price Estimate Section */}
           <div className="mb-5">
-            <h3 className="text-lg text-white font-semibold mb-2">
+            <h3 className="text-xl text-white font-semibold mb-2">
               Price Estimation
             </h3>
-            <div className="grid grid-cols-2 gap-4 bg-zinc-800 p-4 rounded-lg">
+            <div className="grid grid-cols-2 gap-4 bg-zinc-900 p-4 rounded-lg">
               <div>
                 <p className="text-gray-300">Estimated Price (eth):</p>
                 <p className="text-white">
@@ -259,10 +269,10 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
 
           {/* Transaction History Chart */}
           <div className="mb-5">
-            <h3 className="text-lg text-white font-semibold mb-2">
+            <h3 className="text-xl text-white font-semibold mb-2">
               Transaction History
             </h3>
-            <div className="bg-zinc-800 p-4 rounded-lg">
+            <div className="bg-zinc-900 p-4 rounded-lg">
               {isLoading ? (
                 <div className="h-[300px] flex items-center justify-center">
                   <LoadingSpinner />

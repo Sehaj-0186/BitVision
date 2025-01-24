@@ -9,7 +9,7 @@ const Navbar = () => {
       <div className="flex items-center mx-16">
         <Image src={logo} alt="logo" width={60} height={60} />
         <span className="font-cinzel font-semibold bg-gradient-to-r text-transparent bg-clip-text from-gray-500 via-gray-400 to-gray-500 text-xl">
-          NFTnexus
+          BitVision
         </span>
       </div>
       <div className="mx-16">

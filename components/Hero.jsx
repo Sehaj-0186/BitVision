@@ -22,7 +22,7 @@ const Hero = () => {
     <div className="flex flex-col absolute top-32 w-full h-[60vh] items-center justify-evenly">
       <div>
         <span className="inline-flex animate-background-shine bg-[linear-gradient(110deg,#939393,45%,#1e293b,55%,#939393)] bg-[length:250%_100%] bg-clip-text text-[7vw] text-9xl text-transparent font-cinzel font-thin">
-          NFTnexus
+          BitVision
         </span>
       </div>
       <div className="text-center font-light text-gray-300">

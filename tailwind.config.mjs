@@ -14,7 +14,7 @@ export default {
       fontFamily: {
         cinzel: ["Cinzel"],
         bonaNova: ["BonaNova"],
-        grotesk: ["HostGrotesk"]
+        grotesk: ["Clash Grotesk"]
       }
     },
     "animation": {
