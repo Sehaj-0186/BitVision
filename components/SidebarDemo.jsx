@@ -76,7 +76,7 @@ export function SidebarDemo({ children }) {
                 <div className="flex gap-1">
                   <SidebarLink
                     link={{
-                      href: "https://github.com/Sehaj-0186/NFTnexus",
+                      href: "https://github.com/Sehaj-0186/Bitvison",
                       icon: (
                         <IconBrandGithub className="text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0 hover:text-white" />
                       ),
@@ -86,7 +86,7 @@ export function SidebarDemo({ children }) {
                   />
                   <SidebarLink
                     link={{
-                      href: "#",
+                      href: "https://github.com/Sehaj-0186/Bitvison",
                       icon: (
                         <IconBrandInstagram className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0 " />
                       ),
@@ -94,7 +94,7 @@ export function SidebarDemo({ children }) {
                   />
                   <SidebarLink
                     link={{
-                      href: "#",
+                      href: "https://github.com/Sehaj-0186/Bitvison",
                       icon: (
                         <IconBrandX className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
                       ),
@@ -102,7 +102,7 @@ export function SidebarDemo({ children }) {
                   />
                   <SidebarLink
                     link={{
-                      href: "#",
+                      href: "https://github.com/Sehaj-0186/Bitvison",
                       icon: (
                         <IconBrandFacebook className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
                       ),
@@ -110,7 +110,7 @@ export function SidebarDemo({ children }) {
                   />
                   <SidebarLink
                     link={{
-                      href: "#",
+                      href: "https://github.com/Sehaj-0186/Bitvison",
                       icon: (
                         <IconBrandDiscord className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
                       ),
