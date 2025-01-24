@@ -28,6 +28,43 @@ const getRiskScoreColor = (score) => {
   return `rgb(${r}, ${g}, 0)`;
 };
 
+const calculateRiskStatus = (data) => {
+  let score = 100; // Start with perfect score
+
+  // Wash trading check (-40 points if detected)
+  if (data.washTradedVolume > 0) {
+    score -= 40;
+  }
+
+  // Suspect sales activity (-15 points)
+  const suspectSalesRatio = data.sales > 0 ? 
+    (data.washTradedVolume / data.sales) : 0;
+  if (suspectSalesRatio > 0.1) { // If more than 10% of sales are suspicious
+    score -= 15;
+  }
+
+  // Number of connected wallets (-15 points)
+  const connectedWalletsThreshold = 5;
+  if (data.transfers / data.transactions > connectedWalletsThreshold) {
+    score -= 15;
+  }
+
+  // Floor price status (-10 points if zero)
+  if (data.floor_price === 0 || !data.floor_price) {
+    score -= 10;
+  }
+
+  return Math.max(0, Math.min(100, score)); // Ensure score is between 0 and 100
+};
+
+const getRiskStatusLabel = (score) => {
+  if (score >= 80) return 'Very Safe';
+  if (score >= 60) return 'Safe';
+  if (score >= 40) return 'Moderate Risk';
+  if (score >= 20) return 'High Risk';
+  return 'Very High Risk';
+};
+
 // Skeleton components
 const SkeletonBox = () => (
   <div className="bg-zinc-800 rounded-lg h-[80px] animate-pulse"/>
@@ -73,15 +110,25 @@ export default function Portfolio() {
       estimatedPortfolioValue: '0.0000',
       totalVolume: '0.0000',
       riskScore: 0,
+      riskLabel: 'Unknown'
     };
     const data = walletDataList[0];
+    const riskScore = calculateRiskStatus({
+      washTradedVolume: data.wash_trade_volume || 0,
+      sales: data.sales || 0,
+      transfers: data.transfers || 0,
+      transactions: data.transactions || 1,
+      floor_price: data.floor_price
+    });
+
     return {
       realizedProfit: formatNumber(data.sell_volume - data.buy_volume),
       unrealizedProfit: formatNumber(data.minted_value),
       totalPL: formatNumber((data.sell_volume - data.buy_volume) + data.minted_value),
       estimatedPortfolioValue: formatNumber(data.minted_value + data.buy_volume),
       totalVolume: formatNumber(data.buy_volume + data.sell_volume),
-      riskScore: Math.min(100, (data.transactions / 10) * 100),
+      riskScore,
+      riskLabel: getRiskStatusLabel(riskScore)
     };
   }, [walletDataList]);
 
@@ -394,18 +441,25 @@ export default function Portfolio() {
                       ${safePortfolioData.totalVolume}
                     </p>
                   </div>
-                  <div className="  rounded-lg justify-between flex flex-col">
-                    <p className="text-gray-300 text-sm mt-1 ml-2">
-                      Risk Score:
-                    </p>
-                    <p
-                      style={{
-                        color: getRiskScoreColor(safePortfolioData.riskScore),
-                      }}
-                      className="text-white text-3xl mb-1 ml-2"
-                    >
-                      {safePortfolioData.riskScore}/100
-                    </p>
+                  <div className="rounded-lg justify-between flex flex-col">
+                    <p className="text-gray-300 text-sm mt-1 ml-2">Risk Status:</p>
+                    <div className="flex items-center gap-2">
+                      <p
+                        style={{
+                          color: getRiskScoreColor(safePortfolioData.riskScore)
+                        }}
+                        className="text-3xl mb-1 ml-2"
+                      >
+                        {safePortfolioData.riskScore}/100
+                      </p>
+                      <span className={`text-sm px-2 py-1 rounded ${
+                        safePortfolioData.riskScore >= 60 
+                          ? 'bg-green-500/10 text-green-500' 
+                          : 'bg-red-500/10 text-red-500'
+                      }`}>
+                        {safePortfolioData.riskLabel}
+                      </span>
+                    </div>
                   </div>
                 </>
               )}

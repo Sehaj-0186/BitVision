@@ -1,100 +1,192 @@
 'use client';
-import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react'; // Import the arrow icon
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, Info } from 'lucide-react';
+
+const getHealthScoreColor = (score) => {
+  if (score >= 80) return 'text-green-500 bg-green-500/10';
+  if (score >= 60) return 'text-blue-500 bg-blue-500/10';
+  if (score >= 40) return 'text-yellow-500 bg-yellow-500/10';
+  if (score >= 20) return 'text-orange-500 bg-orange-500/10';
+  return 'text-red-500 bg-red-500/10';
+};
+
+const getRiskText = (score) => {
+  if (score >= 80) return 'Low Risk';
+  if (score >= 60) return 'Moderate Risk';
+  if (score >= 40) return 'High Risk';
+  if (score >= 20) return 'Very High Risk';
+  return 'Extreme Risk';
+};
 
 const Table = () => {
-  const [sortBy, setSortBy] = useState('healthScore'); // Default sorting by health score
-  const [sortOrder, setSortOrder] = useState('desc'); // Default sorting order
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [sortBy, setSortBy] = useState('healthScore');
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [selectedSort, setSelectedSort] = useState(''); // Add new state for select value
 
-  // Sample data
-  const data = [
-    { name: 'NFT 1', healthScore: 85, buyers: 10, sellers: 5, washTradeVolume: 100 },
-    { name: 'NFT 2', healthScore: 70, buyers: 8, sellers: 3, washTradeVolume: 200 },
-    { name: 'NFT 3', healthScore: 90, buyers: 15, sellers: 7, washTradeVolume: 150 },
-    { name: 'NFT 4', healthScore: 60, buyers: 5, sellers: 2, washTradeVolume: 50 },
-    { name: 'NFT 5', healthScore: 75, buyers: 12, sellers: 4, washTradeVolume: 300 },
-    { name: 'NFT 6', healthScore: 80, buyers: 9, sellers: 6, washTradeVolume: 120 },
-    { name: 'NFT 7', healthScore: 95, buyers: 20, sellers: 10, washTradeVolume: 400 },
-    { name: 'NFT 8', healthScore: 65, buyers: 3, sellers: 1, washTradeVolume: 30 },
-    { name: 'NFT 9', healthScore: 88, buyers: 11, sellers: 5, washTradeVolume: 250 },
-    { name: 'NFT 10', healthScore: 78, buyers: 7, sellers: 4, washTradeVolume: 90 },
-   ];
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-   // Sorting function
-   const sortedData = [...data].sort((a, b) => {
-     if (sortOrder === 'asc') {
-       return a[sortBy] > b[sortBy] ? 1 : -1;
-     } else {
-       return a[sortBy] < b[sortBy] ? -1 : 1;
-     }
-   });
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/marketplacedata');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch data');
+      }
+      const result = await response.json();
+      if (!result.length) {
+        setError('No data available');
+        return;
+      }
+      setData(result);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-   // Handle sort change
-   const handleSortChange = (e) => {
-     const value = e.target.value;
-     if (value.includes(' ')) {
-       const [columnName, order] = value.split(' ');
-       setSortBy(columnName);
-       setSortOrder(order);
-     }
-   };
+  const sortedData = [...data].sort((a, b) => {
+    // Convert values to numbers for numeric comparisons
+    const aValue = sortBy === 'healthScore' ? Number(a[sortBy]) : a[sortBy];
+    const bValue = sortBy === 'healthScore' ? Number(b[sortBy]) : b[sortBy];
+    
+    // Handle numeric sorting
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    }
+    
+    // Handle string sorting
+    return sortOrder === 'asc' 
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
 
-   return (
-     <div className='w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden'>
-       <div className='flex justify-end h-28 items-end'>
-         <div className='relative p-4'>
-           <select 
-             onChange={handleSortChange} 
-             className='bg-zinc-800 text-white rounded-xl p-2 appearance-none pr-8'
-           >
-             <option value="" disabled selected>Sort by</option> {/* Placeholder */}
-             <option value="healthScore desc">Health Score (High to Low)</option>
-             <option value="healthScore asc">Health Score (Low to High)</option>
-             <option value="buyers desc">Buyers (High to Low)</option>
-             <option value="buyers asc">Buyers (Low to High)</option>
-             <option value="sellers desc">Sellers (High to Low)</option>
-             <option value="sellers asc">Sellers (Low to High)</option>
-             <option value="washTradeVolume desc">Wash Trade Volume (High to Low)</option>
-             <option value="washTradeVolume asc">Wash Trade Volume (Low to High)</option>
-           </select>
-           {/* Add the arrow icon */}
-           <ChevronDown className="absolute right-6 top-[50%] transform -translate-y-[50%] text-white pointer-events-none" />
-         </div>
-       </div>
-       <div className='overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900'>
-         {/* Table Head */}
-         <table className='w-[95%] mx-auto bg-black rounded-xl'>
-           <thead >
-             <tr className='text-center text-gray-300 bg-zinc-900 text-xl font-thin'>
-               <th className='p-4'>Name</th>
-               <th className='p-4'>Health Score</th>
-               <th className='p-4'>Buyers</th>
-               <th className='p-4'>Sellers</th>
-               <th className='p-4'>Wash Trade Volume</th>
-             </tr>
-           </thead>
-         </table>
+  const handleSortChange = (e) => {
+    const value = e.target.value;
+    setSelectedSort(value); // Update selected value
+    if (value) {
+      const [columnName, order] = value.split(' ');
+      setSortBy(columnName);
+      setSortOrder(order);
+    }
+  };
 
-         {/* Table Body */}
-         <div className="overflow-y-auto max-h-[70vh] bg-zinc-900 rounded-xl">
-           <table className='w-[95%] mx-auto bg-black rounded-xl'>
-             <tbody className='text-center'>
-               {sortedData.map((item) => (
-                 <tr key={item.name} className='border-b border-zinc-800 '>
-                   <td className='p-4 text-white'>{item.name}</td>
-                   <td className='p-4 text-white'>{item.healthScore}</td>
-                   <td className='p-4 text-white'>{item.buyers}</td>
-                   <td className='p-4 text-white'>{item.sellers}</td>
-                   <td className='p-4 text-white'>{item.washTradeVolume}</td>
-                 </tr>
-               ))}
-             </tbody>
-           </table>
-         </div>
+  const sortOptions = [
+    { value: "healthScore desc", label: "Health Score (High to Low)", field: "healthScore" },
+    { value: "healthScore asc", label: "Health Score (Low to High)", field: "healthScore" },
+    { value: "buyers desc", label: "Most Buyers" },
+    { value: "buyers asc", label: "Least Buyers" },
+    { value: "sellers desc", label: "Most Sellers" },
+    { value: "sellers asc", label: "Least Sellers" },
+    { value: "washTradeVolume desc", label: "Highest Wash Trade Volume" },
+    { value: "washTradeVolume asc", label: "Lowest Wash Trade Volume" },
+  ];
 
-       </div>
-     </div>
-   );
+  if (loading) {
+    return (
+      <div className='w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden flex items-center justify-center'>
+        <div className='text-white text-xl'>Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className='w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden flex items-center justify-center'>
+        <div className='text-red-500 text-xl'>Error: {error}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="w-[90%] mx-auto my-10 bg-black rounded-xl overflow-hidden flex flex-col"
+      style={{ height: "calc(100vh - 120px)" }}
+    >
+      <div className="flex justify-end items-center px-6 py-2 border-b border-zinc-800">
+        <div className="relative">
+          <select
+            value={selectedSort}
+            onChange={handleSortChange}
+            className="bg-zinc-800 text-white rounded-xl p-2.5 pr-10 appearance-none border border-zinc-700 hover:border-zinc-600 transition-colors"
+          >
+            <option value="">Sort by</option>
+            {sortOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4 pointer-events-none" />
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-hidden rounded-xl bg-zinc-900 mb-6">
+        <div className="h-full overflow-auto">
+          <table className="w-full">
+            <thead className="sticky top-0 z-10 bg-zinc-900">
+              <tr className="text-left text-zinc-400 bg-zinc-900 text-[23px] font-thin border-b border-zinc-800">
+                <th className="p-4 pl-6">Collection Name</th>
+
+                <th className="p-4 text-right">Buyers</th>
+                <th className="p-4 text-right">Sellers</th>
+                <th className="p-4 text-right pr-6">Wash Trade Volume(ETH)</th>
+                <th className="p-4 relative group">
+                  Health Score
+                  <Info className="inline-block ml-1 w-4 h-4 opacity-50 group-hover:opacity-100" />
+                  <div className="absolute hidden group-hover:block bg-zinc-800 text-xs p-2 rounded -bottom-12 left-4 w-48">
+                    Higher score indicates lower risk of wash trading
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-800">
+              {sortedData.map((item) => (
+                <tr
+                  key={item.id}
+                  className="hover:bg-zinc-800/30 transition-colors"
+                >
+                  <td className="p-4 pl-6 text-white">{item.name}</td>
+
+                  <td className="p-4 text-right text-white">
+                    {item.buyers?.toLocaleString()}
+                  </td>
+                  <td className="p-4 text-right text-white">
+                    {item.sellers?.toLocaleString()}
+                  </td>
+                  <td className="p-4 pr-6  text-right text-white">
+                    {item.washTradeVolume?.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="p-4">
+                    <div
+                      className={`inline-flex items-center px-3 py-1 rounded-full ${getHealthScoreColor(
+                        item.healthScore
+                      )}`}
+                    >
+                      <span className="font-medium">
+                        {item.healthScore?.toFixed(0) || "N/A"}
+                      </span>
+                      <span className="ml-2 text-xs opacity-75">
+                        {getRiskText(item.healthScore)}
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Table;
