@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
-
-const API_KEY = '0385f2a4bef504a96ba79b36343195e5';
+import dotenv from 'dotenv';
+dotenv.config();
+const API_KEY = process.env.API_KEY;
 const BATCH_SIZE = 30;
 
 async function fetchAllData(url, accumulatedData = []) {

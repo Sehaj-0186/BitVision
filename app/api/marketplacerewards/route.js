@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
-
+import dotenv from 'dotenv';
+dotenv.config();
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -16,7 +17,7 @@ export async function GET(request) {
       },
       headers: {
         accept: 'application/json', 
-        'x-api-key': '0385f2a4bef504a96ba79b36343195e5'
+        'x-api-key': process.env.API_KEY
       }
     };
 
