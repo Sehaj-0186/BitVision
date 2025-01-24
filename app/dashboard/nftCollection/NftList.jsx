@@ -552,7 +552,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
           <button 
             onClick={handleLoadMoreTokens}
             disabled={isLoadingTokens || isLoadingContract}
-            className={`px-6 py-3 bg-gradient-to-r from-orange-400 to-pink-500 rounded-lg
+            className={`px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg
               font-semibold text-white shadow-lg transform transition-all
               hover:scale-105 active:scale-95 flex items-center gap-2
               ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
