@@ -343,7 +343,7 @@ export default function Portfolio() {
             )}
           </Box>
           <div className=" w-full h-[50%] flex flex-col items-center justify-center">
-            <div className="grid grid-cols-2 gap-4 p-2 rounded-xl h-[60%] w-[90%] bg-zinc-950">
+            <div className="grid grid-cols-2 gap-4 p-2 rounded-xl h-[60%] w-[90%] bg-zinc-900">
               <div className="col-span-2 ">
                 {" "}
                 {/* Make the title span across both columns */}
@@ -351,31 +351,31 @@ export default function Portfolio() {
               </div>
               <div className="rounded-lg justify-between flex flex-col p-2">
                 <p className="text-gray-300 text-sm">Minted:</p>
-                <p className="text-white text-3xl">{nftOverview.minted}</p>
+                <p className="text-white text-[25px]">{nftOverview.minted}</p>
               </div>
               <div className="rounded-lg justify-between flex flex-col p-2">
                 <p className="text-gray-300 text-sm">Burnt:</p>
-                <p className="text-white text-3xl">{nftOverview.burnt}</p>
+                <p className="text-white text-[25px]">{nftOverview.burnt}</p>
               </div>
               <div className="rounded-lg justify-between flex flex-col p-2">
                 <p className="text-gray-300 text-sm">Transferred:</p>
-                <p className="text-white text-3xl">{nftOverview.transferred}</p>
+                <p className="text-white text-[25px]">{nftOverview.transferred}</p>
               </div>
               <div className="rounded-lg justify-between flex flex-col p-2">
                 <p className="text-gray-300 text-sm">Received:</p>
-                <p className="text-white text-3xl">{nftOverview.received}</p>
+                <p className="text-white text-[25px]">{nftOverview.received}</p>
               </div>
             </div>
 
             {/* Marketplace Rewards Section */}
-            <div className="bg-zinc-950 w-[90%] mx-auto mt-4 p-4 rounded-lg">
+            <div className="bg-zinc-900 w-[90%] mx-auto mt-4 p-4 rounded-lg">
               <h3 className="text-lg text-white mx-3">Marketplace Rewards</h3>
 
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <div className=" h-[70px] rounded-lg  justify-between flex flex-col">
                   <span className="text-gray-300 text-sm mt-1 ml-2">Blur:</span>
 
-                  <span className="text-white text-3xl mb-1 ml-2">
+                  <span className="text-white text-[25px] mb-1 ml-2">
                     {formatNumber(marketplaceRewards?.blur || 0)}
                   </span>
                 </div>
@@ -384,7 +384,7 @@ export default function Portfolio() {
                     Looks:
                   </span>
 
-                  <span className="text-white text-3xl mb-1 ml-2">
+                  <span className="text-white text-[25px] mb-1 ml-2">
                     ${formatNumber(marketplaceRewards?.looks || 0)}
                   </span>
                 </div>
@@ -394,7 +394,7 @@ export default function Portfolio() {
         </div>
         <div className="w-[70%] bg-black p-4 rounded-lg">
           {/* Portfolio Performance */}
-          <div className="mb-4 bg-zinc-950 p-6 rounded-2xl">
+          <div className="mb-4 bg-zinc-900 p-6 rounded-2xl">
             <h3 className="text-lg text-white mb-2 ">Portfolio Performance</h3>
             <div className="grid grid-cols-2 gap-4">
               {isLoadingPortfolio ? (
@@ -405,7 +405,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       Realized Profit:
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       ${safePortfolioData.realizedProfit}
                     </p>
                   </div>
@@ -413,7 +413,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       Unrealized Profit:
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       ${safePortfolioData.unrealizedProfit}
                     </p>
                   </div>
@@ -421,7 +421,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       Total P&L:
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       ${safePortfolioData.totalPL}
                     </p>
                   </div>
@@ -429,7 +429,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       Est. Portfolio Value:
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       ${safePortfolioData.estimatedPortfolioValue}
                     </p>
                   </div>
@@ -437,7 +437,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       Total Volume:
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       ${safePortfolioData.totalVolume}
                     </p>
                   </div>
@@ -465,9 +465,8 @@ export default function Portfolio() {
               )}
             </div>
           </div>
-
           {/* Trading Activity */}
-          <div className="mb-4 bg-zinc-950 p-6 rounded-2xl">
+          <div className="mb-4 bg-zinc-900 p-6 rounded-2xl">
             <h3 className="text-lg text-white mb-2">Trading Activity</h3>
             <div className="grid grid-cols-2 gap-4">
               {isLoadingAnalysis ? (
@@ -478,7 +477,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       NFTs Bought:
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       {safeTradingData.nftsBought}
                     </p>
                   </div>
@@ -486,7 +485,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       NFTs Sold:
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       {safeTradingData.nftsSold}
                     </p>
                   </div>
@@ -494,7 +493,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       Buy Volume (in $):
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       ${safeTradingData.buyVolume}
                     </p>
                   </div>
@@ -502,7 +501,7 @@ export default function Portfolio() {
                     <p className="text-gray-300 text-sm mt-1 ml-2">
                       Sell Volume (in $):
                     </p>
-                    <p className="text-white text-3xl mb-1 ml-2">
+                    <p className="text-white text-[25px] mb-1 ml-2">
                       ${safeTradingData.sellVolume}
                     </p>
                   </div>
@@ -510,9 +509,8 @@ export default function Portfolio() {
               )}
             </div>
           </div>
-
           {/* Risk Analysis */}
-          <div className="mb-4 bg-zinc-950 p-6 rounded-2xl">
+          <div className="mb-4 bg-zinc-900 p-6 rounded-2xl">
             <h3 className="text-lg text-white mb-2">Risk Analysis</h3>
             {isLoadingAnalysis ? (
               <>
@@ -543,7 +541,7 @@ export default function Portfolio() {
                     <span className="text-gray-300 text-sm mt-1 ml-2">
                       Wash Traded NFTs:
                     </span>
-                    <span className="text-white text-3xl mb-1 ml-2">
+                    <span className="text-white text-[25px] mb-1 ml-2">
                       {riskAnalysis.washTradedNFTs}
                     </span>
                   </div>
@@ -551,7 +549,7 @@ export default function Portfolio() {
                     <span className="text-gray-300 text-sm mt-1 ml-2">
                       Wash Traded Volume (in $):
                     </span>
-                    <span className="text-white text-3xl mb-1 ml-2">
+                    <span className="text-white text-[25px] mb-1 ml-2">
                       ${riskAnalysis.washTradedVolume}
                     </span>
                   </div>
