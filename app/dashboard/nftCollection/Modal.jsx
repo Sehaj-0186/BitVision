@@ -8,23 +8,21 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { ShieldCheck, ShieldAlert } from 'lucide-react';
+import "./spinner.css";
 
 const LoadingValue = () => (
   <span className="inline-block h-6 w-24 bg-zinc-700 animate-pulse rounded" />
 );
 
-const LoadingSpinner = () => (
-  <div className="relative inline-block h-7 w-7">
-    <div 
-      className="absolute inset-0 rounded-full animate-spin "
-      style={{
-        background: 'linear-gradient(to bottom, #fc30e1, #3052fc)',
-        maskImage: 'radial-gradient(transparent 65%, black 65%)',
-        WebkitMaskImage: 'radial-gradient(transparent 65%, black 65%)',
-      }}
-    ></div>
-  </div>
-);
+  const LoadingSpinner = () => {
+    return (
+      <div className="spinner-container justify-end flex h-20 items-center">
+        <div className="rotating-gradient"></div>
+      </div>
+    );
+  };
+
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -190,7 +188,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
           </div>
 
           {/* Wash Trade Analysis */}
-          <div>
+          <div className="mb-5">
             <h3 className="text-xl text-white font-semibold mb-2">
               Wash Trade Analysis
             </h3>
@@ -216,17 +214,17 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
 
               {/* Status with conditional styling */}
               <div
-                className={`rounded-lg p-3 ${
+                className={`rounded-lg p-3 flex ${
                   nft.washTradeStatus === "Active"
-                    ? "bg-red-400"
-                    : "bg-green-400"
+                    ? "bg-zinc-800 border-red-600 border-[1px]"
+                    : "bg-zinc-800 border-green-600 border-[1px]"
                 }`}
               >
-                <span>Status:</span>{" "}
+                <span className="mr-2"> Status:</span>{" "}
                 {nft.washTradeStatus === "Active" ? (
-                  <> 🚩 {<span>Suspicious</span>}</>
+                  <> <ShieldAlert color="red"/> {<span>Suspicious</span>}</>
                 ) : (
-                  <> ✅ {<span>Clear</span>}</>
+                  <> <ShieldCheck color="green"/> {<span >Clear</span>}</>
                 )}
               </div>
             </div>

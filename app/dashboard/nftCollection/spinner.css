@@ -1,0 +1,29 @@
+.rotating-gradient {
+    width: 30px; /* Size of the spinner */
+    height: 30px; /* Size of the spinner */
+    border-radius: 50%;
+    background: linear-gradient(to bottom, #fc30e1, #3052fc);
+    mask-image: radial-gradient(transparent 60%, black 60%); /* Adjusted for thickness */
+    -webkit-mask-image: radial-gradient(transparent 60%, black 60%); /* Adjusted for thickness */
+    animation: spin-gradient 1.5s linear infinite, rotate-gradient 4s linear infinite;
+  }
+  
+  /* Spin the entire element */
+  @keyframes spin-gradient {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Rotate the gradient itself */
+  @keyframes rotate-gradient {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+  }

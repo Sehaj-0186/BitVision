@@ -108,7 +108,7 @@ const Table = () => {
       className="w-[90%] mx-auto my-10 bg-black rounded-xl overflow-hidden flex flex-col"
       style={{ height: "calc(100vh - 120px)" }}
     >
-      <div className="flex justify-end items-center px-6 py-2 border-b border-zinc-800">
+      <div className="flex justify-end items-center px-6 py-2 ">
         <div className="relative">
           <select
             value={selectedSort}
@@ -126,17 +126,17 @@ const Table = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden rounded-xl bg-zinc-900 mb-6">
+      <div className="flex-1 overflow-hidden rounded-xl bg-zinc-950 mb-6">
         <div className="h-full overflow-auto">
           <table className="w-full">
             <thead className="sticky top-0 z-10 bg-zinc-900">
-              <tr className="text-left text-zinc-400 bg-zinc-900 text-[23px] font-thin border-b border-zinc-800">
-                <th className="p-4 pl-6">Collection Name</th>
+              <tr className="text-center text-zinc-400 bg-zinc-900 text-[23px] font-light border-b border-zinc-500">
+                <th className="p-4 pl-6 text-center">Collection Name</th>
 
-                <th className="p-4 text-right">Buyers</th>
-                <th className="p-4 text-right">Sellers</th>
-                <th className="p-4 text-right pr-6">Wash Trade Volume(ETH)</th>
-                <th className="p-4 relative group">
+                <th className="p-4 text-center">Buyers</th>
+                <th className="p-4 text-center">Sellers</th>
+                <th className="p-4 text-center pr-6">Wash Trade Volume(ETH)</th>
+                <th className="p-4 relative group text-center">
                   Health Score
                   <Info className="inline-block ml-1 w-4 h-4 opacity-50 group-hover:opacity-100" />
                   <div className="absolute hidden group-hover:block bg-zinc-800 text-xs p-2 rounded -bottom-12 left-4 w-48">
@@ -145,27 +145,29 @@ const Table = () => {
                 </th>
               </tr>
             </thead>
+            
             <tbody className="divide-y divide-zinc-800">
               {sortedData.map((item) => (
+                
                 <tr
                   key={item.id}
                   className="hover:bg-zinc-800/30 transition-colors"
                 >
-                  <td className="p-4 pl-6 text-white">{item.name}</td>
+                  <td className="p-4 pl-6 text-white text-center">{item.name}</td>
 
-                  <td className="p-4 text-right text-white">
+                  <td className="p-4 text-center text-white">
                     {item.buyers?.toLocaleString()}
                   </td>
-                  <td className="p-4 text-right text-white">
+                  <td className="p-4 text-center text-white">
                     {item.sellers?.toLocaleString()}
                   </td>
-                  <td className="p-4 pr-6  text-right text-white">
+                  <td className="p-4 pr-6  text-center text-white">
                     {item.washTradeVolume?.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 text-center">
                     <div
                       className={`inline-flex items-center px-3 py-1 rounded-full ${getHealthScoreColor(
                         item.healthScore
