@@ -1,0 +1,11 @@
+.dropdown-options {
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+  
+  .dropdown-options div {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .dropdown-options div:hover {
+    transform: scale(1.05); /* Enlarge option on hover */
+  }

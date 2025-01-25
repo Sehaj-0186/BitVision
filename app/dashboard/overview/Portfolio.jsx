@@ -261,6 +261,23 @@ export default function Portfolio() {
     fetchData();
   }, [fetchData]);
 
+
+  function GradientCircularProgress() {
+      return (
+        <>
+          <svg width={0} height={0}>
+            <defs>
+              <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#e01cd5" />
+                <stop offset="100%" stopColor="#3052fc" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <CircularProgress size="30px" sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+        </>
+      );
+    }
+
   // Render logic
   if (!isMounted) return null;
   if (error) {
@@ -273,7 +290,7 @@ export default function Portfolio() {
   if (isLoading) {
     return (
       <div className="w-[95%] mx-auto my-4 flex justify-center items-center h-[400px]">
-        <CircularProgress />
+        <GradientCircularProgress />
       </div>
     );
   }
@@ -523,7 +540,7 @@ export default function Portfolio() {
               </>
             ) : (
               <>
-                <div className="flex gap-2 bg-zinc-900 px-6 py-4 rounded-2xl">
+                <div className="flex gap-2 bg-zinc-950 px-6 py-4 rounded-2xl">
                   {riskAnalysis.suspiciousActivityDetected ? (
                     <>
                       <ShieldCheck color="green" />
@@ -545,7 +562,7 @@ export default function Portfolio() {
                       {riskAnalysis.washTradedNFTs}
                     </span>
                   </div>
-                  <div className=" h-[70px] rounded-lg  justify-between flex flex-col">
+                  <div className=" h-[70px] rounded-lg justify-between flex flex-col">
                     <span className="text-gray-300 text-sm mt-1 ml-2">
                       Wash Traded Volume (in $):
                     </span>

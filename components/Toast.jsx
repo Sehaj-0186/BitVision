@@ -1,16 +1,51 @@
-'use client';
-import React from 'react';
-import { X } from 'lucide-react'; // Correctly import the X icon
+import * as React from 'react';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
 
-const Toast = ({ message, onClose }) => {
-  return (
-    <div className="fixed top-4 right-4 bg-zinc-950 text-white rounded-lg p-4 shadow-lg transition-opacity duration-300 ease-in-out">
-      <div className="flex justify-between items-center text-thin">
-        <span>{message}</span>
-        <X onClick={onClose} className="color-red ml-2 cursor-pointer" /> {/* Use X instead of IconX */}
-      </div>
-    </div>
+export default function PositionedSnackbar({ButtonName, Message}) {
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = state;
+
+  const handleClick = (newState) => () => {
+    setState({ ...newState, open: true });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+
+  const buttons = (
+    <React.Fragment>
+      
+      <Grid container sx={{ justifyContent: 'center' }}>
+       
+        <Grid item xs={6} sx={{ textAlign: 'right' }}>
+          <Button onClick={handleClick({ vertical: 'top', horizontal: 'right' })}>
+            {ButtonName}
+          </Button>
+        </Grid>
+        
+      </Grid>
+    </React.Fragment>
   );
-};
 
-export default Toast;
+  return (
+    <Box sx={{ width: 500 }}>
+      {buttons}
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        message={Message}
+        key={vertical + horizontal}
+        color='green'
+      />
+    </Box>
+  );
+}

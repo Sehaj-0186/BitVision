@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Modal from './Modal'; // Import the Modal component
 import axios from 'axios'
+import { CircularProgress } from '@mui/material';
+
 
 // New component for lazy-loaded NFT card
 const NFTCard = ({ nft, onClick }) => {
@@ -35,10 +37,10 @@ const NFTCard = ({ nft, onClick }) => {
     <div 
       ref={cardRef}
       onClick={() => onClick(nft)}
-      className='bg-zinc-900 rounded-xl overflow-hidden shadow-lg transform transition-transform 
-        hover:scale-105 cursor-pointer'
+      className='bg-zinc-900 rounded-xl overflow-hidden hover:shadow-normal transform transition-transform 
+        hover:scale-105 cursor-pointer hover:shadow-white'
     >
-      <div className='w-[95%] mx-auto mt-2 rounded-t-xl h-40 relative'>
+      <div className='w-full rounded-t-xl h-40 relative'>
         {isVisible && (
           <img 
             src={nft.image} 
@@ -60,6 +62,22 @@ const NFTCard = ({ nft, onClick }) => {
   );
 };
 
+function GradientCircularProgress() {
+  return (
+    <React.Fragment>
+      <svg width={0} height={0}>
+        <defs>
+          <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#e01cd5" />
+            <stop offset="100%" stopColor="#3052fc" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <CircularProgress size="30px" sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+    </React.Fragment>
+  );
+}
+
 const LoadingSpinner = () => {
   const [rotation, setRotation] = useState(0);
 
@@ -71,19 +89,7 @@ const LoadingSpinner = () => {
   }, []);
 
   return (
-    <div 
-      className="relative inline-flex items-center justify-center w-6 h-6 group"
-      style={{ transform: `rotate(${rotation}deg)` }}
-      title="Loading..."
-    >
-      <div className="absolute inset-0 rounded-full border-2 border-t-white border-r-gray-300 
-        border-b-gray-500 border-l-gray-300 group-hover:border-t-orange-400 
-        transition-colors duration-300">
-      </div>
-      <div className="w-2 h-2 bg-white rounded-full group-hover:bg-orange-400 
-        transition-colors duration-300">
-      </div>
-    </div>
+    <GradientCircularProgress />
   );
 };
 
@@ -550,16 +556,17 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
         {/* Buttons with improved styling */}
         {uniqueTokenCount < totalCollectionTokens && (
           <button 
-            onClick={handleLoadMoreTokens}
-            disabled={isLoadingTokens || isLoadingContract}
-            className={`px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg
-              font-semibold text-white shadow-lg transform transition-all
-              hover:scale-105 active:scale-95 flex items-center gap-2
-              ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
-          >
-            Load More Tokens ({uniqueTokenCount}/{totalCollectionTokens})
-            {isLoadingTokens && <LoadingSpinner />}
-          </button>
+          onClick={handleLoadMoreTokens}
+          disabled={isLoadingTokens || isLoadingContract}
+          className={`px-6 py-3 rounded-lg
+            font-semibold text-white shadow-lg transform transition-all
+            border-2 border-zinc-400 bg-transparent hover:bg-opacity-10 active:bg-opacity-20 flex items-center gap-2
+            ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
+        >
+          Load More Tokens ({uniqueTokenCount}/{totalCollectionTokens})
+          {isLoadingTokens && <LoadingSpinner />}
+        </button>
+        
         )}
         
         {uniqueTokenCount >= totalCollectionTokens && 
@@ -567,14 +574,15 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
           <button 
             onClick={handleLoadNextContract}
             disabled={isLoadingTokens || isLoadingContract}
-            className={`px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg
-              font-semibold text-white shadow-lg transform transition-all
-              hover:scale-105 active:scale-95 flex items-center gap-2
-              ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
-          >
-            Load Next Collection
-            {isLoadingContract && <LoadingSpinner />}
-          </button>
+            className={`px-6 py-3 rounded-lg
+                       font-semibold text-white shadow-lg transform transition-all
+                        border-2 border-zinc-400 bg-zinc-950 hover:bg-opacity-10 active:bg-opacity-20 flex items-center gap-2
+                        ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
+>
+  Load Next Collection
+  {isLoadingContract && <LoadingSpinner />}
+</button>
+
         )}
       </div>
 
