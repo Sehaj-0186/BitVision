@@ -12,7 +12,7 @@ const Hero = () => {
 
   const handleClick = () => {
     if (!isConnected) {
-      return; // Early return if wallet not connected
+      return; 
     }
     setIsClicked(true);
     router.push("/dashboard/overview");
@@ -36,20 +36,16 @@ const Hero = () => {
         <span>Make smarter decisions with real-time insights.</span>
       </div>
       <div className="mt-4 relative">
-        <div
-          className={`absolute bottom-[120%] text-center w-64 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-gray-800 text-gray-200 text-sm rounded opacity-0 pointer-events-none transition-opacity duration-500 ${
-            isHovered ? "opacity-100" : ""
-          }`}
-        >
-          {!isConnected
-            ? "Please connect your wallet using the button above"
-            : "Click to get started!"}
-        </div>
+
+        {!isConnected && isHovered && (
+          <div className={`absolute bottom-[120%] text-center w-64 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-zinc-900 text-gray-200 text-sm rounded transition-opacity duration-300 opacity-100`}>
+            Connect your Wallet first!
+          </div>
+        )}
+        
         <button
-          className={`bg-transparent border-[1px] border-gray-600 rounded-md px-6 py-2 text-gray-300 transition-all duration-300 ${
-            !isConnected
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-gray-800 hover:border-gray-400"
+          className={`bg-transparent border-[1px] border-zinc-600 rounded-md px-6 py-2 text-gray-300 transition-all duration-300 ${
+            !isConnected ? "opacity-50 cursor-not-allowed" : ""
           }`}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}

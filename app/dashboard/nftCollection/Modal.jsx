@@ -10,15 +10,33 @@ import {
 } from "recharts";
 import { ShieldCheck, ShieldAlert } from 'lucide-react';
 import "./spinner.css";
+import { CircularProgress } from '@mui/material';
+
 
 const LoadingValue = () => (
   <span className="inline-block h-6 w-24 bg-zinc-700 animate-pulse rounded" />
 );
 
+function GradientCircularProgress() {
+  return (
+    <React.Fragment>
+      <svg width={0} height={0}>
+        <defs>
+          <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#e01cd5" />
+            <stop offset="100%" stopColor="#3052fc" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <CircularProgress size="30px" sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+    </React.Fragment>
+  );
+}
+
   const LoadingSpinner = () => {
     return (
       <div className="spinner-container justify-end flex h-20 items-center">
-        <div className="rotating-gradient"></div>
+        <GradientCircularProgress/>
       </div>
     );
   };

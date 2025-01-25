@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Info } from 'lucide-react';
+import { CircularProgress } from '@mui/material';
+
 
 const getHealthScoreColor = (score) => {
   if (score >= 80) return 'text-green-500 bg-green-500/10';
@@ -87,10 +89,27 @@ const Table = () => {
     { value: "washTradeVolume asc", label: "Lowest Wash Trade Volume" },
   ];
 
+  function GradientCircularProgress() {
+    return (
+      <React.Fragment>
+        <svg width={0} height={0}>
+          <defs>
+            <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e01cd5" />
+              <stop offset="100%" stopColor="#3052fc" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <CircularProgress size="30px" sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+      </React.Fragment>
+    );
+  }
+
   if (loading) {
     return (
-      <div className='w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden flex items-center justify-center'>
-        <div className='text-white text-xl'>Loading...</div>
+      <div className='w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden flex flex-col items-center justify-center'>
+        <GradientCircularProgress/>
+        <div className='text-white text-xl ml-2'>Loading Marketplaces...</div>
       </div>
     );
   }
@@ -126,11 +145,11 @@ const Table = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden rounded-xl bg-zinc-950 mb-6">
+      <div className="flex-1 overflow-hidden rounded-xl bg-zinc-900 mb-6">
         <div className="h-full overflow-auto">
-          <table className="w-full">
+          <table className="w-[90%] mx-auto font-light">
             <thead className="sticky top-0 z-10 bg-zinc-900">
-              <tr className="text-center text-zinc-400 bg-zinc-900 text-[23px] font-light border-b border-zinc-500">
+              <tr className="text-center text-zinc-300 bg-zinc-900 text-[23px] font-thin ">
                 <th className="p-4 pl-6 text-center">Collection Name</th>
 
                 <th className="p-4 text-center">Buyers</th>
@@ -146,7 +165,8 @@ const Table = () => {
               </tr>
             </thead>
             
-            <tbody className="divide-y divide-zinc-800">
+            
+            <tbody className="divide-y divide-zinc-800 bg-zinc-950 ">
               {sortedData.map((item) => (
                 
                 <tr
