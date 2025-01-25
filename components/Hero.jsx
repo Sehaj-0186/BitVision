@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAppContext } from "@/components/context";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
+import "../app/globals.css"
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -44,16 +45,16 @@ const Hero = () => {
         )}
         
         <button
-          className={`bg-transparent border-[1px] border-zinc-600 rounded-md px-6 py-2 text-gray-300 transition-all duration-300 ${
-            !isConnected ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onClick={handleClick}
-          disabled={!isConnected}
-        >
-          {!isConnected ? "Connect Wallet First" : "Get Started!"}
-        </button>
+  className={`bg-transparent border-[1px] border-zinc-600 rounded-md px-6 py-2 text-gray-300 transition-all ease-in-out duration-300 ${
+    !isConnected ? "opacity-50 cursor-not-allowed" : "hover:bg-gradient-to-br hover:text-transparent bg-clip-text from-pink-500 to-blue-500"
+  }`}
+  onMouseEnter={() => setIsHovered(true)}
+  onMouseLeave={() => setIsHovered(false)}
+  onClick={handleClick}
+  disabled={!isConnected}
+>
+  {!isConnected ? "Connect Wallet First" : "Get Started!"}
+</button>
       </div>
     </div>
   );

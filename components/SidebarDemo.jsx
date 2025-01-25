@@ -76,7 +76,7 @@ export function SidebarDemo({ children }) {
                 <div className="flex gap-1">
                   <SidebarLink
                     link={{
-                      href: "https://github.com/Sehaj-0186/Bitvison",
+                      href: "https://github.com/Sehaj-0186/BitVision",
                       icon: (
                         <IconBrandGithub className="text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0 hover:text-white" />
                       ),

@@ -12,6 +12,23 @@ import {
 import { CircularProgress } from '@mui/material';
 import Toast from '@/components/Toast'; 
 
+
+function GradientCircularProgress() {
+    return (
+      <React.Fragment>
+        <svg width={0} height={0}>
+          <defs>
+            <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e01cd5" />
+              <stop offset="100%" stopColor="#3052fc" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <CircularProgress size="24px" sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+      </React.Fragment>
+    );
+  }
+
 const WalletOverview = () => {
   const { address, isConnected } = useAccount();
   const { data: balanceData, isLoading: isBalanceLoading } = useBalance({
@@ -87,7 +104,7 @@ const WalletOverview = () => {
             <div className="text-gray-400">
               {isConnected ? (
                 isBalanceLoading ? (
-                  <CircularProgress size={24} />
+                  <GradientCircularProgress size={24} />
                 ) : (
                   `$${balanceData?.formatted || "0"}`
                 )
@@ -108,7 +125,7 @@ const WalletOverview = () => {
           <div className="text-right text-4xl text-white">
             {isConnected ? (
               isLoading ? (
-                <CircularProgress size={24} />
+                <GradientCircularProgress size={24} />
               ) : (
                 `$${portfolioValue.toFixed(2) || "0"}`
               )
@@ -126,7 +143,7 @@ const WalletOverview = () => {
           <div className="text-right text-4xl text-white">
             {isConnected ? (
               isLoading ? (
-                <CircularProgress size={24} />
+                <GradientCircularProgress size={24} />
               ) : (
                 nftCount.toString()
               )

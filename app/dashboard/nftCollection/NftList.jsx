@@ -37,10 +37,10 @@ const NFTCard = ({ nft, onClick }) => {
     <div 
       ref={cardRef}
       onClick={() => onClick(nft)}
-      className='bg-zinc-900 rounded-xl overflow-hidden shadow-lg transform transition-transform 
-        hover:scale-105 cursor-pointer'
+      className='bg-zinc-900 rounded-xl overflow-hidden hover:shadow-normal transform transition-transform 
+        hover:scale-105 cursor-pointer hover:shadow-white'
     >
-      <div className='w-[95%] mx-auto mt-2 rounded-t-xl h-40 relative'>
+      <div className='w-full rounded-t-xl h-40 relative'>
         {isVisible && (
           <img 
             src={nft.image} 
@@ -576,7 +576,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
             disabled={isLoadingTokens || isLoadingContract}
             className={`px-6 py-3 rounded-lg
                        font-semibold text-white shadow-lg transform transition-all
-                        border-2 border-zinc-400 bg-transparent hover:bg-opacity-10 active:bg-opacity-20 flex items-center gap-2
+                        border-2 border-zinc-400 bg-zinc-950 hover:bg-opacity-10 active:bg-opacity-20 flex items-center gap-2
                         ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
 >
   Load Next Collection

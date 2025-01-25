@@ -78,6 +78,9 @@ const Table = () => {
     }
   };
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+
   const sortOptions = [
     { value: "healthScore desc", label: "Health Score (High to Low)", field: "healthScore" },
     { value: "healthScore asc", label: "Health Score (Low to High)", field: "healthScore" },
@@ -128,21 +131,35 @@ const Table = () => {
       style={{ height: "calc(100vh - 120px)" }}
     >
       <div className="flex justify-end items-center px-6 py-2 ">
-        <div className="relative">
-          <select
-            value={selectedSort}
-            onChange={handleSortChange}
-            className="bg-zinc-800 text-white rounded-xl p-2.5 pr-10 appearance-none border border-zinc-700 hover:border-zinc-600 transition-colors"
-          >
-            <option value="">Sort by</option>
-            {sortOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4 pointer-events-none" />
-        </div>
+      <div className="relative">
+  <select
+    value={selectedSort}
+    onChange={handleSortChange}
+    className="bg-zinc-800 text-white rounded-xl p-2.5 pr-10 appearance-none border border-zinc-700 hover:border-zinc-600 transition-colors"
+  >
+    <option value="">Sort by</option>
+    {sortOptions.map((option) => (
+      <option key={option.value} value={option.value}>
+        {option.label}
+      </option>
+    ))}
+  </select>
+  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4 pointer-events-none"/>
+  
+  {/* Dropdown Options */}
+  <div className={`absolute left-0 mt-1 w-full bg-zinc-800 rounded-lg overflow-hidden transition-all duration-1000 ease-in-out ${isDropdownOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`}>
+    {sortOptions.map((option) => (
+      <div
+        key={option.value}
+        className="p-2 text-white hover:bg-zinc-950 transition-transform duration-1000 transform hover:scale-105 ease-in-out"
+        onClick={() => handleSortChange({ target: { value: option.value } })}
+      >
+        {option.label}
+      </div>
+    ))}
+  </div>
+</div>
+
       </div>
 
       <div className="flex-1 overflow-hidden rounded-xl bg-zinc-900 mb-6">

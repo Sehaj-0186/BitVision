@@ -55,6 +55,14 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+const copyAddress = () => {
+  if (address) {
+    navigator.clipboard.writeText(address);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  }
+};
+
 const shortenAddress = (address) => {
     if (!address || address.length <= 8) return address; // Return original if too short
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
