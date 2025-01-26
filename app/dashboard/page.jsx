@@ -1,5 +1,5 @@
 import React from 'react'
-import { SidebarDemo } from '@/components/SidebarDemo';
+import { SidebarDemo } from '../../../components/SidebarDemo';
 
 const page = ({children}) => {
   return (

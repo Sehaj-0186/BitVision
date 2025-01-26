@@ -1,7 +1,7 @@
 import React from 'react'
 import { SidebarDemo } from '../../../components/SidebarDemo'
 import Navbar from './Navbar'
-import LineChartAnalytics from './LineChart'
+
 import MultiLineChart from './MultiLineChart'
 import WashTradeChart from './WashTradeChart';
 
