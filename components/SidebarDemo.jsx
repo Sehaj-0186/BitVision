@@ -85,7 +85,7 @@ export function SidebarDemo({ children }) {
                 <div className="flex gap-1">
                   <SidebarLink
                     link={{
-                      href: "https://github.com/Sehaj-0186/BitVision",
+                      href: "https://github.com/Sehaj-0186/BitVision.git",
                       icon: (
                         <IconBrandGithub className="text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0 hover:text-white" />
                       ),
@@ -95,7 +95,7 @@ export function SidebarDemo({ children }) {
                   />
                   <SidebarLink
                     link={{
-                      href: "https://github.com/Sehaj-0186/Bitvison",
+                      href: "https://github.com/Sehaj-0186/BitVision.git",
                       icon: (
                         <IconBrandInstagram className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0 " />
                       ),
@@ -103,7 +103,7 @@ export function SidebarDemo({ children }) {
                   />
                   <SidebarLink
                     link={{
-                      href: "https://github.com/Sehaj-0186/Bitvison",
+                      href: "https://github.com/Sehaj-0186/BitVision.git",
                       icon: (
                         <IconBrandX className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
                       ),
@@ -111,7 +111,7 @@ export function SidebarDemo({ children }) {
                   />
                   <SidebarLink
                     link={{
-                      href: "https://github.com/Sehaj-0186/Bitvison",
+                      href: "https://github.com/Sehaj-0186/BitVision.git",
                       icon: (
                         <IconBrandFacebook className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
                       ),
@@ -119,7 +119,7 @@ export function SidebarDemo({ children }) {
                   />
                   <SidebarLink
                     link={{
-                      href: "https://github.com/Sehaj-0186/Bitvison",
+                      href: "https://github.com/Sehaj-0186/BitVision.git",
                       icon: (
                         <IconBrandDiscord className="text-neutral-700 dark:text-neutral-200 hover:text-white h-6 w-6 flex-shrink-0" />
                       ),
