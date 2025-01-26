@@ -530,7 +530,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
   return (
     <div className='w-[95%] mx-auto bg-zinc-950 h-[calc(100vh-150px)] overflow-y-auto p-4'>
       <div className='text-3xl font-thin my-5 text-gray-400'>NFT List</div>
-      <div className='grid grid-cols-6 gap-6 min-h-[300px]'>
+      <div className='grid grid-cols-6 gap-6 min-h-[100px]'>
         {displayedNftData.length === 0 ? (
           <div className="col-span-6 flex justify-center items-center h-64 text-gray-400">
             No NFTs found in this collection
