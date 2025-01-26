@@ -135,7 +135,7 @@ const Table = () => {
   <select
     value={selectedSort}
     onChange={handleSortChange}
-    className="bg-zinc-800 text-white rounded-xl p-2.5 pr-10 appearance-none border border-zinc-700 hover:border-zinc-600 transition-colors"
+    className="bg-zinc-900 text-white rounded-xl p-2.5 pr-10 appearance-none border border-zinc-700 hover:border-zinc-600 transition-colors"
   >
     <option value="">Sort by</option>
     {sortOptions.map((option) => (
@@ -147,7 +147,7 @@ const Table = () => {
   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4 pointer-events-none"/>
   
   {/* Dropdown Options */}
-  <div className={`absolute left-0 mt-1 w-full bg-zinc-800 rounded-lg overflow-hidden transition-all duration-1000 ease-in-out ${isDropdownOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`}>
+  <div className={`absolute left-0 mt-1 w-full bg-zinc-900 rounded-lg overflow-hidden transition-all duration-1000 ease-in-out ${isDropdownOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`}>
     {sortOptions.map((option) => (
       <div
         key={option.value}
@@ -162,11 +162,11 @@ const Table = () => {
 
       </div>
 
-      <div className="flex-1 overflow-hidden rounded-xl bg-zinc-900 mb-6">
+      <div className="flex-1 overflow-hidden rounded-xl bg-zinc-950 mb-6">
         <div className="h-full overflow-auto">
           <table className="w-[90%] mx-auto font-light">
-            <thead className="sticky top-0 z-10 bg-zinc-900">
-              <tr className="text-center text-zinc-300 bg-zinc-900 text-[23px] font-thin ">
+            <thead className="sticky top-0 z-10 bg-zinc-950">
+              <tr className="text-center text-zinc-300 bg-zinc-950 text-[23px] font-thin ">
                 <th className="p-4 pl-6 text-center">Collection Name</th>
 
                 <th className="p-4 text-center">Buyers</th>
@@ -183,7 +183,7 @@ const Table = () => {
             </thead>
             
             
-            <tbody className="divide-y divide-zinc-800 bg-zinc-950 ">
+            <tbody className="divide-y divide-zinc-800 bg-black ">
               {sortedData.map((item) => (
                 
                 <tr

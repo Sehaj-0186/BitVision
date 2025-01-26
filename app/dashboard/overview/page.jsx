@@ -1,4 +1,4 @@
-import { SidebarDemo } from "@/components/SidebarDemo";
+import { SidebarDemo } from "../../../components/SidebarDemo";
 import WalletOverview from "./WalletOverview";
 import Navbar from "./Navbar";
 import Portfolio from "./Portfolio";

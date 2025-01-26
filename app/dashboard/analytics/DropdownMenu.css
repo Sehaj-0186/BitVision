@@ -1,0 +1,16 @@
+/* DropdownMenu.css */
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.7s ease-in;
+  }
+  
+  .fade-out {
+    opacity: 0;
+    transition: opacity 0.7s ease-out;
+  }
+  
+  /* Initially hide the dropdown content */
+  .dropdown-menu-content {
+    opacity: 0;
+  }
+  

@@ -12,11 +12,12 @@ import {
   IconBrandX,
   IconBrandFacebook,
   IconBrandDiscord,
+  IconChartHistogram
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 import SiteLogo from "../images/logo1.png";
 
 export function SidebarDemo({ children }) {
@@ -40,6 +41,14 @@ export function SidebarDemo({ children }) {
       href: "/dashboard/nftMarketplace",
       icon: (
         <IconBuildingStore className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    ,
+    {
+      label: "Market Analytics",
+      href: "/dashboard/analytics",
+      icon: (
+        <IconChartHistogram className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {

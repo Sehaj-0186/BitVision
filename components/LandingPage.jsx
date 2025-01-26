@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import bg from "../images/bgLandingPage.jpg";
 import Image from "next/image";
 import Hero from "./Hero";
-import { useAppContext } from "@/components/context";
+import { useAppContext } from "./context/index";
 
 const LandingPage = () => {
   const { isClicked } = useAppContext();

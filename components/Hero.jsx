@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useAppContext } from "@/components/context";
+import { useAppContext } from "./context/index";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import "../app/globals.css"
