@@ -1,8 +1,17 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { CircularProgress } from '@mui/material';
-
+import { Button } from "../../../components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator
+} from "../../../components/ui/dropdown-menu";
 
 const getHealthScoreColor = (score) => {
   if (score >= 80) return 'text-green-500 bg-green-500/10';
@@ -26,7 +35,18 @@ const Table = () => {
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('healthScore');
   const [sortOrder, setSortOrder] = useState('desc');
-  const [selectedSort, setSelectedSort] = useState(''); // Add new state for select value
+  const [selectedSort, setSelectedSort] = useState('healthScore desc');
+
+  const sortOptions = [
+    { value: "healthScore desc", label: "Health Score (High to Low)" },
+    { value: "healthScore asc", label: "Health Score (Low to High)" },
+    { value: "buyers desc", label: "Most Buyers" },
+    { value: "buyers asc", label: "Least Buyers" },
+    { value: "sellers desc", label: "Most Sellers" },
+    { value: "sellers asc", label: "Least Sellers" },
+    { value: "washTradeVolume desc", label: "Highest Wash Trade Volume" },
+    { value: "washTradeVolume asc", label: "Lowest Wash Trade Volume" },
+  ];
 
   useEffect(() => {
     fetchData();
@@ -52,45 +72,25 @@ const Table = () => {
     }
   };
 
+  const handleSortChange = (value) => {
+    setSelectedSort(value);
+    const [columnName, order] = value.split(' ');
+    setSortBy(columnName);
+    setSortOrder(order);
+  };
+
   const sortedData = [...data].sort((a, b) => {
-    // Convert values to numbers for numeric comparisons
     const aValue = sortBy === 'healthScore' ? Number(a[sortBy]) : a[sortBy];
     const bValue = sortBy === 'healthScore' ? Number(b[sortBy]) : b[sortBy];
     
-    // Handle numeric sorting
     if (typeof aValue === 'number' && typeof bValue === 'number') {
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     }
     
-    // Handle string sorting
     return sortOrder === 'asc' 
       ? String(aValue).localeCompare(String(bValue))
       : String(bValue).localeCompare(String(aValue));
   });
-
-  const handleSortChange = (e) => {
-    const value = e.target.value;
-    setSelectedSort(value); // Update selected value
-    if (value) {
-      const [columnName, order] = value.split(' ');
-      setSortBy(columnName);
-      setSortOrder(order);
-    }
-  };
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-
-  const sortOptions = [
-    { value: "healthScore desc", label: "Health Score (High to Low)", field: "healthScore" },
-    { value: "healthScore asc", label: "Health Score (Low to High)", field: "healthScore" },
-    { value: "buyers desc", label: "Most Buyers" },
-    { value: "buyers asc", label: "Least Buyers" },
-    { value: "sellers desc", label: "Most Sellers" },
-    { value: "sellers asc", label: "Least Sellers" },
-    { value: "washTradeVolume desc", label: "Highest Wash Trade Volume" },
-    { value: "washTradeVolume asc", label: "Lowest Wash Trade Volume" },
-  ];
 
   function GradientCircularProgress() {
     return (
@@ -110,17 +110,17 @@ const Table = () => {
 
   if (loading) {
     return (
-      <div className='w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden flex flex-col items-center justify-center'>
-        <GradientCircularProgress/>
-        <div className='text-white text-xl ml-2'>Loading Marketplaces...</div>
+      <div className="w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden flex flex-col items-center justify-center">
+        <GradientCircularProgress />
+        <div className="text-white text-xl ml-2">Loading Marketplaces...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className='w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden flex items-center justify-center'>
-        <div className='text-red-500 text-xl'>Error: {error}</div>
+      <div className="w-[80%] h-screen my-10 mx-auto bg-black rounded-xl overflow-hidden flex items-center justify-center">
+        <div className="text-red-500 text-xl">Error: {error}</div>
       </div>
     );
   }
@@ -130,45 +130,37 @@ const Table = () => {
       className="w-[90%] mx-auto my-10 bg-black rounded-xl overflow-hidden flex flex-col"
       style={{ height: "calc(100vh - 120px)" }}
     >
-      <div className="flex justify-end items-center px-6 py-2 ">
-      <div className="relative">
-  <select
-    value={selectedSort}
-    onChange={handleSortChange}
-    className="bg-zinc-900 text-white rounded-xl p-2.5 pr-10 appearance-none border border-zinc-700 hover:border-zinc-600 transition-colors"
-  >
-    <option value="">Sort by</option>
-    {sortOptions.map((option) => (
-      <option key={option.value} value={option.value}>
-        {option.label}
-      </option>
-    ))}
-  </select>
-  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4 pointer-events-none"/>
-  
-  {/* Dropdown Options */}
-  <div className={`absolute left-0 mt-1 w-full bg-zinc-900 rounded-lg overflow-hidden transition-all duration-1000 ease-in-out ${isDropdownOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`}>
-    {sortOptions.map((option) => (
-      <div
-        key={option.value}
-        className="p-2 text-white hover:bg-zinc-950 transition-transform duration-1000 transform hover:scale-105 ease-in-out"
-        onClick={() => handleSortChange({ target: { value: option.value } })}
-      >
-        {option.label}
-      </div>
-    ))}
-  </div>
-</div>
-
+      <div className="flex justify-end items-center px-6 py-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="bg-zinc-900 text-white border-zinc-700 hover:bg-zinc-800 hover:border-zinc-600">
+              Sort by: {sortOptions.find(opt => opt.value === selectedSort)?.label || 'Select'}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56 bg-zinc-900 border-zinc-700">
+            <DropdownMenuLabel className='bg-zinc-900'>Sort By</DropdownMenuLabel>
+            <DropdownMenuSeparator/>
+            <DropdownMenuRadioGroup value={selectedSort} onValueChange={handleSortChange}>
+              {sortOptions.map((option) => (
+                <DropdownMenuRadioItem
+                  key={option.value}
+                  value={option.value}
+                  className="text-white hover:bg-zinc-800 cursor-pointer"
+                >
+                  {option.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="flex-1 overflow-hidden rounded-xl bg-zinc-900 mb-6">
         <div className="h-full overflow-auto">
           <table className="w-[90%] mx-auto font-light">
             <thead className="sticky top-0 z-10 bg-zinc-900">
-              <tr className="text-center text-zinc-300 bg-zinc-900 text-[23px] font-thin ">
+              <tr className="text-center text-zinc-300 bg-zinc-900 text-[23px] font-thin">
                 <th className="p-4 pl-6 text-center">Collection Name</th>
-
                 <th className="p-4 text-center">Buyers</th>
                 <th className="p-4 text-center">Sellers</th>
                 <th className="p-4 text-center pr-6">Wash Trade Volume(ETH)</th>
@@ -181,24 +173,20 @@ const Table = () => {
                 </th>
               </tr>
             </thead>
-            
-            
-            <tbody className="divide-y divide-zinc-800 bg-black ">
+            <tbody className="divide-y divide-zinc-800 bg-black">
               {sortedData.map((item) => (
-                
                 <tr
                   key={item.id}
                   className="hover:bg-zinc-800/30 transition-colors"
                 >
                   <td className="p-4 pl-6 text-white text-center">{item.name}</td>
-
                   <td className="p-4 text-center text-white">
                     {item.buyers?.toLocaleString()}
                   </td>
                   <td className="p-4 text-center text-white">
                     {item.sellers?.toLocaleString()}
                   </td>
-                  <td className="p-4 pr-6  text-center text-white">
+                  <td className="p-4 pr-6 text-center text-white">
                     {item.washTradeVolume?.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
