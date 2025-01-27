@@ -9,7 +9,7 @@ import { CircularProgress } from '@mui/material';
 const NFTCard = ({ nft, onClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const cardRef = React.useRef();
+  const cardRef = useRef();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -38,14 +38,15 @@ const NFTCard = ({ nft, onClick }) => {
       ref={cardRef}
       onClick={() => onClick(nft)}
       className='bg-zinc-900 rounded-xl overflow-hidden hover:shadow-normal transform transition-transform 
-        hover:scale-105 cursor-pointer hover:shadow-white'
+        hover:scale-105 cursor-pointer hover:shadow-zinc-500'
+      style={{ position: 'relative' }}
     >
       <div className='w-full rounded-t-xl h-40 relative'>
         {isVisible && (
           <img 
             src={nft.image} 
             alt={nft.name} 
-            className={`w-full h-full object-cover transition-opacity duration-300 ${
+            className={`w-full h-full object-cover transition-opacity duration-300 hover:opacity-45 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
             onLoad={() => setImageLoaded(true)}
@@ -54,6 +55,9 @@ const NFTCard = ({ nft, onClick }) => {
         {(!isVisible || !imageLoaded) && (
           <div className="w-full h-full bg-zinc-800 animate-pulse"/>
         )}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 z-20">
+          <p className="italic text-white text-xs">Click to see details</p>
+        </div>
       </div>
       <div className='p-3 text-center'>
         <h3 className='text-white text-sm truncate'>{nft.name}</h3>
@@ -61,6 +65,7 @@ const NFTCard = ({ nft, onClick }) => {
     </div>
   );
 };
+
 
 function GradientCircularProgress() {
   return (

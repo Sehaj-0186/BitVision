@@ -11,6 +11,13 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { CircularProgress } from '@mui/material';
+import Binanceimg from "../../../images/pngwing.com.png"
+import Ethereumimg from "../../../images/Ethereumimg.png"
+import Lineaimg from "../../../images/Linea.png"
+import Polygonimg from "../../../images/polygon-matic-logo.png"
+import Avalancheimg from "../../../images/avalanche.svg"
+import Solanaimg from "../../../images/Solana.jpeg"
+import Image from 'next/image';
 
 // Available metrics configuration
 const metricConfigs = {
@@ -64,38 +71,39 @@ const chains = [
   { 
     label: 'Ethereum', 
     value: 'ethereum',
-    supportedTimeframes: ['24h', '7d', '30d', '90d'] // excluding 'all'
+    image: Ethereumimg,
+    supportedTimeframes: ['24h', '7d', '30d', '90d']
   },
   { 
     label: 'Binance', 
     value: 'binance',
+    image: Binanceimg,
     supportedTimeframes: ['24h', '7d', '30d', '90d', 'all']
   },
   { 
     label: 'Avalanche', 
     value: 'avalanche',
+    image: Avalancheimg,
     supportedTimeframes: ['24h', '7d', '30d', '90d', 'all']
   },
   { 
     label: 'Linea', 
     value: 'linea',
+    image: Lineaimg,
     supportedTimeframes: ['24h', '7d', '30d', '90d', 'all']
   },
   { 
     label: 'Solana', 
     value: 'solana',
+    image: Solanaimg,
     supportedTimeframes: ['24h', '7d', '30d', '90d', 'all']
   },
   { 
     label: 'Polygon', 
     value: 'polygon',
+    image: Polygonimg,
     supportedTimeframes: ['24h', '7d', '30d', '90d', 'all']
   },
-  { 
-    label: 'Bitcoin', 
-    value: 'bitcoin',
-    supportedTimeframes: ['24h', '7d', '30d', '90d', 'all']
-  }
 ];
 
 export default function MultiLineChart() {
@@ -136,6 +144,22 @@ export default function MultiLineChart() {
       setIsLoading(false);
     }
   };
+
+  function GradientCircularProgress() {
+    return (
+      <React.Fragment>
+        <svg width={0} height={0}>
+          <defs>
+            <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e01cd5" />
+              <stop offset="100%" stopColor="#3052fc" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <CircularProgress size="30px" sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+      </React.Fragment>
+    );
+  }
 
   useEffect(() => {
     fetchChartData();
@@ -401,62 +425,127 @@ export default function MultiLineChart() {
   }
 
   return (
-    <div className='w-[90%] mx-auto h-full bg-zinc-950'>
-      <div className='w-full h-full flex flex-col'>
-        <div className='w-full h-20 bg-zinc-900 flex items-end justify-end px-10 py-3 space-x-4'>
-          {/* <div className='text-5xl text-white mr-5'>Market Analytics</div> */}
+    <div className='w-[90%] mx-auto bg-zinc-900 rounded-xl'>
+      <div className='w-full flex flex-col bg-zinc-900 rounded-xl'>
+        <div className='w-full h-20 bg-zinc-900 flex items-end justify-between px-10 py-3 space-x-4 rounded-xl'>
+          <div className='text-3xl text-white mr-5'>Performance Trends</div>
           
           {/* Metrics Selection */}
+          <div className='w-[400px] flex justify-evenly items-center'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">Metrics ({selectedMetrics.length})</Button>
+              <Button variant="outline" className="min-w-[100px]">
+                <div className="flex items-center gap-2">
+                  <span>Metrics</span>
+                  <span className="bg-zinc-800 px-2 py-0.5 rounded-md text-sm">
+                    {selectedMetrics.length}
+                  </span>
+                </div>
+              </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Available Metrics</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {Object.entries(metricConfigs).map(([key, config]) => renderMetricMenuItem(key, config))}
+            <DropdownMenuContent className="min-w-[200px] bg-zinc-950 border border-zinc-800">
+              <DropdownMenuLabel className="text-zinc-400 bg-zinc-950">Available Metrics</DropdownMenuLabel>
+              <DropdownMenuSeparator  />
+              {Object.entries(metricConfigs).map(([key, config]) => (
+                <DropdownMenuCheckboxItem
+                  key={key}
+                  checked={selectedMetrics.includes(key)}
+                  onCheckedChange={() => toggleMetric(key)}
+                  disabled={selectedChains.length > 1 && selectedMetrics.length > 0 && !selectedMetrics.includes(key)}
+                  className="transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer hover:bg-zinc-800"
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2">
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: config.color }}
+                      />
+                      <span className="text-zinc-200">{config.label}</span>
+                    </div>
+                    {selectedChains.length > 1 && selectedMetrics.length > 0 && !selectedMetrics.includes(key) && (
+                      <span className="text-xs text-yellow-500 ml-2">(Single metric only)</span>
+                    )}
+                  </div>
+                </DropdownMenuCheckboxItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
           {/* Time Frame Selection */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                {timeFrames.find(t => t.value === selectedTimeFrame)?.label || 'Time Frame'}
+              <Button variant="outline" className="min-w-[100px]">
+                <div className="flex items-center gap-2">
+                  <span>{timeFrames.find(t => t.value === selectedTimeFrame)?.label || 'Time Frame'}</span>
+                </div>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="min-w-[200px] bg-zinc-950 border border-zinc-800">
+              <DropdownMenuLabel className="text-zinc-400 bg-zinc-950">Select Timeframe</DropdownMenuLabel>
+              <DropdownMenuSeparator />
               {availableTimeframes.map(timeFrame => (
                 <DropdownMenuCheckboxItem
                   key={timeFrame.value}
                   checked={selectedTimeFrame === timeFrame.value}
                   onCheckedChange={() => setSelectedTimeFrame(timeFrame.value)}
+                  className="transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer hover:bg-zinc-800"
                 >
-                  {timeFrame.label}
+                  <div className="flex items-center gap-2">
+                    <span className="text-zinc-200">{timeFrame.label}</span>
+                  </div>
                 </DropdownMenuCheckboxItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Chain Selection - Modified for multi-select */}
+          {/* Chain Selection */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                {selectedChains.length === 1 
-                  ? chains.find(c => c.value === selectedChains[0])?.label 
-                  : `${selectedChains.length} Chains`}
+              <Button variant="outline" className="min-w-[100px]">
+                {selectedChains.length === 1 ? (
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={chains.find(c => c.value === selectedChains[0])?.image}
+                      alt={selectedChains[0]}
+                      width={20}
+                      height={20}
+                      className="rounded-full"
+                    />
+                    <span>{chains.find(c => c.value === selectedChains[0])?.label}</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <span>Chains</span>
+                    <span className="bg-zinc-800 px-2 py-0.5 rounded-md text-sm">
+                      {selectedChains.length}
+                    </span>
+                  </div>
+                )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="min-w-[200px] bg-zinc-950 border border-zinc-800">
+              <DropdownMenuLabel className="text-zinc-400 bg-zinc-950">Select Chains</DropdownMenuLabel>
+              <DropdownMenuSeparator />
               {chains.map(chain => (
                 <DropdownMenuCheckboxItem
                   key={chain.value}
                   checked={selectedChains.includes(chain.value)}
                   onCheckedChange={() => toggleChain(chain.value)}
                   disabled={selectedMetrics.length > 1 && !selectedChains.includes(chain.value)}
+                  className="transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer group hover:bg-zinc-800"
                 >
-                  <div className="flex items-center justify-between w-full">
-                    <span>{chain.label}</span>
+                  <div className="flex items-center justify-between w-full gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="relative w-5 h-5 transition-transform duration-300 ease-in-out group-hover:scale-110">
+                        <Image
+                          src={chain.image}
+                          alt={chain.label}
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      </div>
+                      <span className="text-zinc-200">{chain.label}</span>
+                    </div>
                     {chain.value === 'ethereum' && selectedTimeFrame === 'all' && (
                       <span className="text-xs text-yellow-500 ml-2">(All time not available)</span>
                     )}
@@ -465,12 +554,13 @@ export default function MultiLineChart() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          </div>
         </div>
 
         <div className='w-full h-[50vh] bg-zinc-900 p-4 relative'>
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/50 backdrop-blur-sm">
-              <CircularProgress />
+              <GradientCircularProgress />
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
@@ -519,7 +609,7 @@ export default function MultiLineChart() {
         </div>
 
         {metadata && (
-          <div className="grid grid-cols-5 gap-4 p-4 bg-zinc-900 mt-4">
+          <div className="grid grid-cols-5 gap-4 p-4 bg-zinc-950 mt-4 rounded-xl w-[90%] mx-auto mb-5">
             {Object.entries(metadata.totals).map(([key, value]) => (
               <div key={key} className="text-center">
                 <p className="text-gray-400 text-sm">{key}</p>
