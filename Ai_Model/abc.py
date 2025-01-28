@@ -110,9 +110,9 @@ def predict_risk_for_contract(contract_address):
     response = requests.get(url, headers=headers)
     data = json.loads(response.text)['data']
     if data is None:
-        print('data not available')
+        return {'error': 'Data not available'}
     else:
-        print(predict_risk(data[0]))
+        return predict_risk(data[0])
 
 # Example usage
 predict_risk_for_contract('0x000000000000003607fce1ac9e043a86675c5c2f')
