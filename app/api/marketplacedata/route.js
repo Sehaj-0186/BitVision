@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 const API_KEY = process.env.API_KEY;
 const BATCH_SIZE = 30;
-
+let Blk = 'ethereum';
 async function fetchAllData(url, accumulatedData = []) {
   try {
     const options = {
@@ -39,7 +39,7 @@ export async function GET() {
     const baseUrl = 'https://api.unleashnfts.com/api/v2/nft/marketplace';
     const [tradersData, washtradeData] = await Promise.all([
       fetchAllData(`${baseUrl}/traders?blockchain=ethereum&time_range=all&sort_by=name&sort_order=desc&offset=0&limit=${BATCH_SIZE}`),
-      fetchAllData(`${baseUrl}/washtrade?blockchain=ethereum&time_range=all&sort_by=name&sort_order=desc&offset=0&limit=${BATCH_SIZE}`)
+      fetchAllData(`${baseUrl}/washtrade?blockchain=${Blk}&time_range=all&sort_by=name&sort_order=desc&offset=0&limit=${BATCH_SIZE}`)
     ]);
 
     if (!tradersData.length && !washtradeData.length) {
@@ -106,10 +106,11 @@ function calculateHealthScore(trader, washInfo) {
     ) * 100;
 
     // Ensure the score is between 0 and 100
-    const normalizedScore = Math.min(Math.max(riskScore, 0), 100);
-
+    const normalizedScore = Number(
+      Math.min(Math.max(riskScore, 0), 100).toFixed(1)
+    );
     // Return health score (inverse of risk score)
-    return 100 - Math.round(normalizedScore);
+    return (normalizedScore);
   } catch (error) {
     console.error('Health score calculation error:', error);
     return 50; // Default score in case of calculation errors
