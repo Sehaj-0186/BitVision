@@ -160,7 +160,7 @@ const Table = () => {
           <table className="w-[90%] mx-auto font-light">
             <thead className="sticky top-0 z-10 bg-zinc-900">
               <tr className="text-center text-zinc-300 bg-zinc-900 text-[23px] font-thin">
-                <th className="p-4 pl-6 text-center">Collection Name</th>
+                <th className="p-4 pl-6 text-center">Marketplace Name</th>
                 <th className="p-4 text-center">Buyers</th>
                 <th className="p-4 text-center">Sellers</th>
                 <th className="p-4 text-center pr-6">Wash Trade Volume(ETH)</th>

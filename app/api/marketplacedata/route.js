@@ -119,9 +119,9 @@ function calculateHealthScore(trader, washInfo) {
 
 // Helper function to get risk level description
 function getRiskLevel(riskScore) {
-  if (riskScore <= 20) return 'Low Risk';
-  if (riskScore <= 40) return 'Moderate Risk';
-  if (riskScore <= 60) return 'High Risk';
-  if (riskScore <= 80) return 'Very High Risk';
+  if (riskScore <= 80) return 'Low Risk';
+  if (riskScore <= 60) return 'Moderate Risk';
+  if (riskScore <= 40) return 'High Risk';
+  if (riskScore <= 20) return 'Very High Risk';
   return 'Extreme Risk';
 }
