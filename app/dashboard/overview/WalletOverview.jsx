@@ -40,7 +40,7 @@ const WalletOverview = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchWalletScores = async (walletAddress) => {
-    //  `/api/nftscore?wallet=${walletAddress}`
+     `/api/nftscore?wallet=${'0x7c1958ba95ab3170f6069dadf4de304b0c00000c'}`
     try {
       setIsLoading(true);
       const response = await fetch(

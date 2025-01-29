@@ -6,6 +6,7 @@ import {
   IconLibrary,
   IconUserBolt,
   IconBuildingStore,
+  IconFileTextAi,
   IconBrandGithub,
   IconCircleArrowRight,
   IconBrandInstagram,
@@ -34,6 +35,13 @@ export function SidebarDemo({ children }) {
       href: "/dashboard/nftCollection",
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "NFTs Predictor",
+      href: "/dashboard/nftPrediction",
+      icon: (
+        <IconFileTextAi className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {

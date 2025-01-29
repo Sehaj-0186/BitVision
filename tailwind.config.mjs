@@ -32,6 +32,14 @@ export default {
         "to": {
           "backgroundPosition": "-200% 0"
         }
+      },
+      shimmer: {
+        '0%': { transform: 'translateX(-200%)' },
+        '100%': { transform: 'translateX(200%)' }
+      },
+      pulse: {
+        '0%': { transform: 'translate(-50%, -50%) scale(0)', opacity: '1' },
+        '100%': { transform: 'translate(-50%, -50%) scale(2)', opacity: '0' }
       }
     }
   },
