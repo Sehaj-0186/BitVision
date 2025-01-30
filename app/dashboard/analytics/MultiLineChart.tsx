@@ -19,7 +19,7 @@ import Avalancheimg from "../../../images/avalanche.svg"
 import Solanaimg from "../../../images/Solana.jpeg"
 import Image from 'next/image';
 
-// Available metrics configuration
+
 const metricConfigs = {
   volume: {
     label: 'Volume',
@@ -58,7 +58,7 @@ const metricConfigs = {
   }
 };
 
-// Update timeFrames to match API's supported values
+
 const timeFrames = [
   { label: '24H', value: '24h' },
   { label: '7D', value: '7d' },
@@ -127,17 +127,17 @@ export default function MultiLineChart() {
         )
       );
 
-      // Combine data from all chains
+ 
       const combinedData = responses.reduce((acc, response, index) => {
         const chainData = response.data.map(item => ({
           ...item,
-          chain: selectedChains[index] // Add chain identifier to each data point
+          chain: selectedChains[index]
         }));
         return [...acc, ...chainData];
       }, []);
 
       setChartData(combinedData);
-      setMetadata(responses[0].metadata); // Use first chain's metadata for now
+      setMetadata(responses[0].metadata);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {
@@ -165,14 +165,14 @@ export default function MultiLineChart() {
     fetchChartData();
   }, [selectedTimeFrame, selectedChains]);
 
-  // Update toggleMetric to allow multiple metrics with single chain
+  
   const toggleMetric = (metric: string) => {
     setSelectedMetrics(prev => {
       const newMetrics = prev.includes(metric)
         ? prev.filter(m => m !== metric)
         : [...prev, metric];
       
-      // If we have multiple chains selected, only allow one metric
+      
       if (selectedChains.length > 1 && newMetrics.length > 1) {
         return [metric];
       }
@@ -180,14 +180,14 @@ export default function MultiLineChart() {
     });
   };
 
-  // Update toggleChain to handle metric restrictions
+ 
   const toggleChain = (chainValue: string) => {
     setSelectedChains(prev => {
       const newChains = prev.includes(chainValue)
         ? prev.filter(c => c !== chainValue)
         : [...prev, chainValue];
       
-      // If multiple metrics are selected, only allow one chain
+      
       if (selectedMetrics.length > 1 && newChains.length > 1) {
         return [chainValue];
       }
@@ -195,11 +195,11 @@ export default function MultiLineChart() {
     });
   };
 
-  // Update formattedData to handle timestamp alignment
+ 
   const formattedData = useMemo(() => {
     if (!chartData.length) return [];
 
-    // Normalize timestamps for comparison
+   
     const normalizeTimestamp = (dateString: string) => {
       const date = new Date(dateString);
       if (selectedTimeFrame === '24h') {
@@ -208,7 +208,7 @@ export default function MultiLineChart() {
       return date.getTime();
     };
 
-    // Group data points by normalized timestamp
+   
     const groupedByTime = chartData.reduce((acc, dataPoint) => {
       const timestamp = normalizeTimestamp(dataPoint.date);
       if (!acc[timestamp]) {
@@ -245,7 +245,7 @@ export default function MultiLineChart() {
     return scaleTypes[primaryMetric] || { divisor: 1, suffix: '' };
   };
 
-  // Get available timeframes for selected chain
+  
   const availableTimeframes = useMemo(() => {
     const selectedChainConfig = chains.find(c => c.value === selectedChains[0]);
     return timeFrames.filter(tf => 
@@ -253,17 +253,17 @@ export default function MultiLineChart() {
     );
   }, [selectedChains]);
 
-  // Reset timeframe if not supported by new chain
+ 
   useEffect(() => {
     const isTimeframeSupported = availableTimeframes.some(
       tf => tf.value === selectedTimeFrame
     );
     if (!isTimeframeSupported) {
-      setSelectedTimeFrame('24h'); // Default to 24h if current timeframe not supported
+      setSelectedTimeFrame('24h'); 
     }
   }, [selectedChains, availableTimeframes]);
 
-  // Add new function to format dates based on timeframe
+  
   const formatXAxisTick = (value: string) => {
     try {
       const date = new Date(value);
@@ -286,23 +286,23 @@ export default function MultiLineChart() {
     }
   };
 
-  // Calculate appropriate interval based on data length and timeframe
+  
   const getXAxisInterval = (dataLength: number) => {
     switch (selectedTimeFrame) {
       case '24h':
-        return Math.ceil(dataLength / 6); // Show ~6 ticks for 24h
+        return Math.ceil(dataLength / 6); 
       case '7d':
-        return Math.ceil(dataLength / 7); // Show one tick per day
+        return Math.ceil(dataLength / 7); 
       case '30d':
-        return Math.ceil(dataLength / 10); // Show ~10 ticks
+        return Math.ceil(dataLength / 10); 
       case '90d':
-        return Math.ceil(dataLength / 12); // Show ~12 ticks
+        return Math.ceil(dataLength / 12); 
       default:
-        return Math.ceil(dataLength / 8); // Default to 8 ticks
+        return Math.ceil(dataLength / 8);
     }
   };
 
-  // Update CustomTooltip component with better error handling
+  
   interface TooltipValue {
     value: number;
     metric: string;
@@ -319,14 +319,14 @@ export default function MultiLineChart() {
   const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (!active || !payload || !payload.length) return null;
 
-    // Group values by chain with error handling
+    
     const valuesByChain: Record<string, TooltipValue[]> = payload.reduce((acc, entry) => {
       if (!entry || !entry.dataKey) return acc;
 
       const [metricKey, chain] = entry.dataKey.split('_');
       if (!metricKey || !chain) return acc;
 
-      // Find metric config
+     
       const metricEntry = Object.entries(metricConfigs).find(([_, config]) => 
         config.key === metricKey
       );
@@ -377,13 +377,13 @@ export default function MultiLineChart() {
     );
   };
 
-  // Helper function to format values based on metric type
+  
   const formatValue = (value: number, metric: string) => {
     const { divisor, suffix } = getYAxisScale([metric]);
     return `${(value / divisor).toFixed(2)}${suffix}`;
   };
 
-  // Update dropdown menu items to show restrictions
+  
   const renderMetricMenuItem = (key: string, config: any) => (
     <DropdownMenuCheckboxItem
       key={key}
@@ -430,7 +430,7 @@ export default function MultiLineChart() {
         <div className='w-full h-20 bg-zinc-900 flex items-end justify-between px-10 py-3 space-x-4 rounded-xl'>
           <div className='text-3xl text-white mr-5'>Performance Trends</div>
           
-          {/* Metrics Selection */}
+        
           <div className='w-[400px] flex justify-evenly items-center'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -471,7 +471,7 @@ export default function MultiLineChart() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Time Frame Selection */}
+        
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="min-w-[100px]">
@@ -498,7 +498,7 @@ export default function MultiLineChart() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Chain Selection */}
+        
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="min-w-[100px]">
@@ -593,7 +593,7 @@ export default function MultiLineChart() {
                       type="monotone"
                       dataKey={`${metricConfigs[metric].key}_${chain}`}
                       stroke={selectedChains.length > 1 
-                        ? stringToColor(chain) // Add function to generate colors for chains
+                        ? stringToColor(chain) 
                         : metricConfigs[metric].color}
                       name={selectedChains.length > 1 
                         ? `${chains.find(c => c.value === chain)?.label}`
@@ -628,7 +628,7 @@ export default function MultiLineChart() {
   );
 }
 
-// Add helper function to generate colors for chains
+
 function stringToColor(str: string) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

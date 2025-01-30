@@ -20,8 +20,8 @@ export const metadata = {
   title: 'BitVision',
   description: 'Your NFT Analytics Platform',
   icons: {
-    icon: '/logo1.png', // favicon
-    apple: '/logo1.png', // Apple touch icon
+    icon: '/logo1.png', 
+    apple: '/logo1.png', 
   },
 }
 

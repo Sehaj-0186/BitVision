@@ -23,10 +23,10 @@ export async function GET(request) {
 
     const response = await axios.request(options);
     
-    // Extract data from first entry since they're all the same wallet
+    
     const walletData = response.data.data[0];
 
-    // Transform the data to include relevant metrics
+    
     const rewardsData = {
       blur: walletData.nft_marketplace_reward?.blur || 0,
       looks: walletData.nft_marketplace_reward?.looks || 0,

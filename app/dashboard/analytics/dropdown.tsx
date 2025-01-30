@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu"
-import './DropdownMenu.css'; // Import your CSS file
+import './DropdownMenu.css'; 
 
 export function DropdownMenuRadioGroupDemo() {
   const [position, setPosition] = React.useState("bottom")

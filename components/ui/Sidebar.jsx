@@ -72,7 +72,7 @@ export const DesktopSidebar = ({
   onMouseLeave={() => setOpen(false)}
   {...props}
 >
-  {/* Gradient border as a pseudo-element */}
+  
   <div
     className="absolute inset-0 rounded-2xl"
     style={{
@@ -80,10 +80,10 @@ export const DesktopSidebar = ({
       WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
       WebkitMaskComposite: "destination-out",
       maskComposite: "exclude",
-      paddingRight: "1px", // Adjust to control border thickness
+      paddingRight: "1px", 
     }}
   ></div>
-  {/* Content */}
+
   <div className="relative z-10 rounded-2xl bg-black h-full flex flex-col">
     {children}
   </div>

@@ -15,13 +15,13 @@ async function fetchMarketData(chain: string, timeFrame: string) {
       }
     };
 
-    // Add normalization for Bitcoin timestamps
+   
     const normalizeTimestamps = (data: any) => {
       if (chain === 'bitcoin') {
-        // Convert Bitcoin's timestamps to match other chains' format
+       
         const normalizedDates = data.block_dates.map((date: string) => {
           const timestamp = new Date(date);
-          // Round to nearest hour for 24h timeframe
+          
           if (timeFrame === '24h') {
             timestamp.setMinutes(0, 0, 0);
           }
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
     timeFrame = searchParams.get('timeFrame') || '24h';
     chain = searchParams.get('chain') || 'ethereum';
 
-    // Update valid timeframes to match API's supported values
+   
     const validTimeFrames = ['24h', '7d', '30d', '90d', 'all'];
     const validChains = ['ethereum', 'binance', 'avalanche', 'linea', 'solana', 'polygon', 'bitcoin'];
 
@@ -86,7 +86,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // Special case for Ethereum 'all' timeframe
+    
     if (chain === 'ethereum' && timeFrame === 'all') {
       return NextResponse.json(
         { error: 'All time frame not supported for Ethereum' },
@@ -94,10 +94,10 @@ export async function GET(request: Request) {
       );
     }
 
-    console.log('Fetching data for:', { chain, timeFrame });
+    // console.log('Fetching data for:', { chain, timeFrame });
     const data = await fetchMarketData(chain, timeFrame);
 
-    // Validate received data
+  
     if (!data.analytics?.block_dates || !data.holders?.holders_trend || !data.traders?.traders_trend) {
       console.error('Invalid data structure received:', data);
       return NextResponse.json(
@@ -106,7 +106,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // Format the response data
+  
     const formattedData = data.analytics.block_dates.map((date: string, index: number) => ({
       date: new Date(date).toLocaleString(),
       volume_trend: data.analytics.volume_trend?.[index] || 0,
@@ -142,7 +142,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(response);
   } catch (error: any) {
-    // Add more detailed error information
+    
     const errorResponse = {
       error: 'Failed to fetch market data',
       details: error.response?.data?.error || error.message,

@@ -7,5 +7,5 @@
   }
   
   .dropdown-options div:hover {
-    transform: scale(1.05); /* Enlarge option on hover */
+    transform: scale(1.05); 
   }

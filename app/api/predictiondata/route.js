@@ -51,7 +51,7 @@ export async function GET(request) {
 
   try {
     const [analytics, scores, traders, washTrade] = await Promise.all([
-      // Analytics data
+  
       fetchPaginatedData(
         "https://api.unleashnfts.com/api/v2/nft/collection/analytics",
         {
@@ -62,7 +62,7 @@ export async function GET(request) {
           sort_order: "desc"
         }
       ),
-      // Scores data
+     
       fetchPaginatedData(
         "https://api.unleashnfts.com/api/v2/nft/collection/scores",
         {
@@ -73,7 +73,7 @@ export async function GET(request) {
           sort_order: "desc"
         }
       ),
-      // Traders data
+    
       fetchPaginatedData(
         "https://api.unleashnfts.com/api/v2/nft/collection/traders",
         {
@@ -84,7 +84,7 @@ export async function GET(request) {
           sort_order: "desc"
         }
       ),
-      // Washtrade data
+     
       fetchPaginatedData(
         "https://api.unleashnfts.com/api/v2/nft/collection/washtrade",
         {
@@ -97,7 +97,7 @@ export async function GET(request) {
       )
     ]);
 
-    // Extract and format the required metrics
+    
     const formattedData = {
       assets: analytics[0]?.assets || 0,
       floor_price: analytics[0]?.floor_price || 0,

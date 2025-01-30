@@ -66,7 +66,7 @@ const copyAddress = () => {
 };
 
 const shortenAddress = (address) => {
-    if (!address || address.length <= 8) return address; // Return original if too short
+    if (!address || address.length <= 8) return address; 
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
 };
 
@@ -74,7 +74,7 @@ const TransactionChart = ({ transactions }) => {
   if (!transactions?.length) return null;
 
   const chartData = transactions
-    .filter((tx) => tx.price > 0) // Only show transactions with price
+    .filter((tx) => tx.price > 0) 
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .map((tx) => ({
       date: new Date(tx.date).toLocaleDateString(),
@@ -133,7 +133,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
       />
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-40">
       <div className="bg-zinc-950 rounded-lg w-[80vw] h-[80vh] flex relative">
-        {/* Close Button */}
+       
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-200 hover:text-gray-400 text-xl font-bold z-50"
@@ -141,7 +141,6 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
           &times;
         </button>
 
-        {/* Left Section */}
         <div className="w-1/3 p-8 flex flex-col items-center">
           <img
             src={nft.image}
@@ -169,9 +168,9 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
         </div>
 
 
-        {/* Right Section with Loading State */}
+        
         <div className="w-2/3 h-[90%] my-auto p-5 overflow-y-auto">
-          {/* Loading Indicator */}
+         
           {isLoading && (
             <div className="absolute -top-2 right-5 flex items-center gap-2">
               <LoadingSpinner />
@@ -181,7 +180,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
             </div>
           )}
 
-          {/* Price Analysis */}
+      
           <div className="mb-5">
             <h3 className="text-xl text-white font-semibold mb-2">
               Price Analysis
@@ -206,7 +205,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
             </div>
           </div>
 
-          {/* Trading Activity */}
+      
           <div className="mb-5">
             <h3 className="text-xl text-white font-semibold mb-2">
               Trading Activity
@@ -233,7 +232,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
             </div>
           </div>
 
-          {/* Wash Trade Analysis */}
+     
           <div className="mb-5">
             <h3 className="text-xl text-white font-semibold mb-2">
               Wash Trade Analysis
@@ -258,7 +257,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
                 </p>
               </div>
 
-              {/* Status with conditional styling */}
+           
               <div
                 className={`rounded-lg p-3 flex ${
                   nft.washTradeStatus === "Active"
@@ -276,7 +275,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
             </div>
           </div>
 
-          {/* Price Estimate Section */}
+       
           <div className="mb-5">
             <h3 className="text-xl text-white font-semibold mb-2">
               Price Estimation
@@ -313,7 +312,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
             </div>
           </div>
 
-          {/* Transaction History Chart */}
+        
           <div className="mb-5">
             <h3 className="text-xl text-white font-semibold mb-2">
               Transaction History

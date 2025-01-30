@@ -11,7 +11,7 @@ import { ShieldCheck, ShieldAlert } from 'lucide-react';
 import axios from 'axios';
 import { CircularProgress } from '@mui/material';
 
-// Helper functions moved outside component
+
 const formatNumber = (number) => {
   if (number === null || number === undefined) return '0.0000';
   return Number(number).toFixed(2);
@@ -29,32 +29,32 @@ const getRiskScoreColor = (score) => {
 };
 
 const calculateRiskStatus = (data) => {
-  let score = 100; // Start with perfect score
+  let score = 100; 
 
-  // Wash trading check (-40 points if detected)
+
   if (data.washTradedVolume > 0) {
     score -= 40;
   }
 
-  // Suspect sales activity (-15 points)
+  
   const suspectSalesRatio = data.sales > 0 ? 
     (data.washTradedVolume / data.sales) : 0;
-  if (suspectSalesRatio > 0.1) { // If more than 10% of sales are suspicious
+  if (suspectSalesRatio > 0.1) { 
     score -= 15;
   }
 
-  // Number of connected wallets (-15 points)
+  
   const connectedWalletsThreshold = 5;
   if (data.transfers / data.transactions > connectedWalletsThreshold) {
     score -= 15;
   }
 
-  // Floor price status (-10 points if zero)
+  
   if (data.floor_price === 0 || !data.floor_price) {
     score -= 10;
   }
 
-  return Math.max(0, Math.min(100, score)); // Ensure score is between 0 and 100
+  return Math.max(0, Math.min(100, score)); 
 };
 
 const getRiskStatusLabel = (score) => {
@@ -65,7 +65,7 @@ const getRiskStatusLabel = (score) => {
   return 'Very High Risk';
 };
 
-// Skeleton components
+
 const SkeletonBox = () => (
   <div className="bg-zinc-800 rounded-lg h-[80px] animate-pulse"/>
 );
@@ -75,7 +75,7 @@ const SkeletonPieChart = () => (
 );
 
 export default function Portfolio() {
-  // 1. All useState hooks
+
   const [isMounted, setIsMounted] = useState(false);
   const [radius, setRadius] = useState(50);
   const [isHidden, setIsHidden] = useState(true);
@@ -88,7 +88,7 @@ export default function Portfolio() {
   const [error, setError] = useState(null);
   const [marketplaceRewards, setMarketplaceRewards] = useState({});
 
-  // 2. All useMemo hooks
+ 
   const pieChartData = useMemo(() => {
     if (!collectionsData.length) return [];
     return collectionsData
@@ -162,7 +162,7 @@ export default function Portfolio() {
     };
   }, [walletDataList]);
 
-  // Add new memoized values for NFT Overview
+
   const nftOverview = useMemo(() => {
     if (!walletDataList.length) return {
       minted: 0,
@@ -179,7 +179,7 @@ export default function Portfolio() {
     };
   }, [walletDataList]);
 
-  // 3. Data fetching
+
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -206,7 +206,6 @@ export default function Portfolio() {
           }
         }).catch(error => {
           console.warn('Marketplace rewards fetch failed:', error);
-          // Return default values if the rewards fetch fails
           return { data: { blur: 0, looks: 0 } };
         })
       ]);
@@ -238,7 +237,7 @@ export default function Portfolio() {
         setCollectionsData(collections);
       }
 
-      // Process rewards data with fallback
+      
       setMarketplaceRewards({
         blur: rewardsResponse?.data?.blur || 0,
         looks: rewardsResponse?.data?.looks || 0
@@ -255,7 +254,7 @@ export default function Portfolio() {
     }
   }, []);
 
-  // 4. useEffect
+ 
   useEffect(() => {
     setIsMounted(true);
     fetchData();
@@ -278,7 +277,7 @@ export default function Portfolio() {
       );
     }
 
-  // Render logic
+
   if (!isMounted) return null;
   if (error) {
     return (
@@ -295,7 +294,7 @@ export default function Portfolio() {
     );
   }
 
-  // Ensure we have data before rendering
+ 
   if (!walletDataList.length || !collectionsData.length) {
     return (
       <div className="w-[95%] mx-auto my-4 p-4 bg-zinc-900 text-gray-400 rounded-lg text-center">
@@ -304,7 +303,7 @@ export default function Portfolio() {
     );
   }
 
-  // Main render
+  
   return (
     <>
       <div className="w-[95%] mx-auto my-4 flex">
@@ -367,7 +366,7 @@ export default function Portfolio() {
             <div className="grid grid-cols-2 gap-4 p-2 rounded-xl h-[60%] w-[90%] bg-zinc-900">
               <div className="col-span-2 ">
                 {" "}
-                {/* Make the title span across both columns */}
+                
                 <h3 className="text-lg text-white px-4 py-2">NFTs Overview</h3>
               </div>
               <div className="rounded-lg justify-between flex flex-col p-2">
@@ -388,7 +387,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Marketplace Rewards Section */}
+           
             <div className="bg-zinc-900 w-[90%] mx-auto mt-4 p-4 rounded-lg">
               <h3 className="text-lg text-white mx-3">Marketplace Rewards</h3>
 
@@ -414,7 +413,7 @@ export default function Portfolio() {
           </div>
         </div>
         <div className="w-[70%] bg-black p-4 rounded-lg">
-          {/* Portfolio Performance */}
+         
           <div className="mb-4 bg-zinc-900 p-6 rounded-2xl">
             <h3 className="text-lg text-white mb-2 ">Portfolio Performance</h3>
             <div className="grid grid-cols-2 gap-4">
@@ -486,7 +485,7 @@ export default function Portfolio() {
               )}
             </div>
           </div>
-          {/* Trading Activity */}
+        
           <div className="mb-4 bg-zinc-900 p-6 rounded-2xl">
             <h3 className="text-lg text-white mb-2">Trading Activity</h3>
             <div className="grid grid-cols-2 gap-4">
@@ -530,7 +529,7 @@ export default function Portfolio() {
               )}
             </div>
           </div>
-          {/* Risk Analysis */}
+        
           <div className="mb-4 bg-zinc-900 p-6 rounded-2xl">
             <h3 className="text-lg text-white mb-2">Risk Analysis</h3>
             {isLoadingAnalysis ? (
@@ -556,7 +555,7 @@ export default function Portfolio() {
                     </>
                   )}
                 </div>
-                {/* Wash Trade Information */}
+              
                 <div className="mt-6 grid grid-cols-2 gap-4">
                   <div className=" h-[70px] rounded-lg  justify-between flex flex-col">
                     <span className="text-gray-300 text-sm mt-1 ml-2">
@@ -579,9 +578,9 @@ export default function Portfolio() {
             )}
           </div>
         </div>{" "}
-        {/* End of right-side container */}
+     
       </div>{" "}
-      {/* End of main container */}
+    
     </>
   );
 }
