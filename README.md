@@ -10,7 +10,7 @@
 <br />
 <div align="center">
   <a href="https://bitvision.gitbook.io/bitvision/">
-    <img src="images/logo.png" alt="Logo" width="300" height="200">
+    <img src="images/logo.png" alt="Logo" width="200" height="200">
   </a>
 
 <h1 align="center">🚀 BitVision</h1>
