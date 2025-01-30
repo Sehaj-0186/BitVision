@@ -59,6 +59,7 @@ export async function GET() {
         sellers: parseInt(trader.traders_sellers) || 0,
         washTradeVolume: parseFloat(washInfo.washtrade_volume) || 0,
         id: trader.id,
+        url: trader.url,
         // Add additional metrics for transparency
         metrics: {
           suspectSalesRatio: parseFloat(washInfo.washtrade_suspect_sales_ratio) || 0,

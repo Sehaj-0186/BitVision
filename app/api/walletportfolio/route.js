@@ -23,7 +23,9 @@ export async function GET(request) {
   const LIMIT = 100;
 
   try {
-    while (true) {
+    let hasNext = true;
+    
+    while (hasNext) {
       const response = await axios.get(BASE_URL, {
         headers: {
           accept: "application/json",
@@ -32,15 +34,12 @@ export async function GET(request) {
         params: {
           wallet,
           blockchain: "ethereum",
-            time_range: "all",
-          sort_by:"volume",
+          time_range: "all",
+          sort_by: "volume",
           offset: offset.toString(),
           limit: LIMIT.toString(),
         },
       });
-
-   
-
 
       const nfts = response.data.data;
       if (!nfts || nfts.length === 0) break;
@@ -58,10 +57,19 @@ export async function GET(request) {
         portfolio.collections[collection].count++;
       });
 
-      offset += LIMIT;
+      hasNext = response.data.pagination?.has_next || false;
+      if (hasNext) {
+        offset += LIMIT;
+      }
     }
 
-    return NextResponse.json(portfolio);
+    return NextResponse.json({
+      ...portfolio,
+      pagination: {
+        total: Object.keys(portfolio.collections).length,
+        hasNext: false
+      }
+    });
   } catch (error) {
     console.error("Error Response:", error.response?.data || error.message);
     return NextResponse.json(

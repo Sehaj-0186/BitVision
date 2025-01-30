@@ -159,24 +159,38 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
   };
 
   const isTokenImagePairUnique = (tokenId, imageUrl) => {
-    // Check if token already exists with different image
-    if (tokenRegistry.has(tokenId) && tokenRegistry.get(tokenId) !== imageUrl) {
-      console.log(`Token ${tokenId} already exists with different image`);
+    // If we've seen this token before with the same image, it's not unique
+    if (tokenRegistry.has(tokenId) && tokenRegistry.get(tokenId) === imageUrl) {
       return false;
     }
-
-    // Check if image already exists with different token
-    if (imageRegistry.has(imageUrl) && imageRegistry.get(imageUrl) !== tokenId) {
-      console.log(`Image URL already exists with different token ${imageRegistry.get(imageUrl)}`);
+    
+    // If we've seen this image before with the same token, it's not unique
+    if (imageRegistry.has(imageUrl) && imageRegistry.get(imageUrl) === tokenId) {
       return false;
     }
-
+    
+    // Otherwise consider it unique
     return true;
   };
 
   const registerTokenImagePair = (tokenId, imageUrl) => {
-    setTokenRegistry(prev => new Map(prev.set(tokenId, imageUrl)));
-    setImageRegistry(prev => new Map(prev.set(imageUrl, tokenId)));
+    setTokenRegistry(prev => {
+      const newRegistry = new Map(prev);
+      // Only register if not already exists
+      if (!newRegistry.has(tokenId)) {
+        newRegistry.set(tokenId, imageUrl);
+      }
+      return newRegistry;
+    });
+    
+    setImageRegistry(prev => {
+      const newRegistry = new Map(prev);
+      // Only register if not already exists
+      if (!newRegistry.has(imageUrl)) {
+        newRegistry.set(imageUrl, tokenId);
+      }
+      return newRegistry;
+    });
   };
 
   useEffect(() => {
@@ -228,6 +242,18 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
       loadCollectionTokens(index + 1, arr);
       return;
     }
+    
+    // Deduplicate tokens array
+    const uniqueTokens = [...new Set(data.tokens)];
+    data.tokens = uniqueTokens; // Replace with deduplicated array
+    
+    console.log("Loading collection:", collection);
+    console.log("Collection data:", {
+      ...data,
+      tokens: uniqueTokens,
+      originalCount: data.tokens.length,
+      uniqueCount: uniqueTokens.length
+    });
     
     // Skip collections without images
     if (skipCollections.includes(data.contract_address)) {
@@ -484,18 +510,32 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
   }
 
   async function handleLoadMoreTokens() {
-    const [collection, data] = collectionsArray[currentCollectionIndex];
-    const nextBatch = data.tokens.slice(
-      processedCount,
-      processedCount + TOKENS_PER_BATCH
-    );
-    
-    if (nextBatch.length > 0) {
-      await loadMoreTokensFromCurrentCollection(collection, data, nextBatch);
-      setProcessedCount(prev => prev + TOKENS_PER_BATCH);
-      if (processedCount + TOKENS_PER_BATCH >= data.tokens.length) {
+    if (isLoadingTokens || isLoadingContract) {
+      console.log("Already loading, please wait...");
+      return;
+    }
+
+    try {
+      const [collection, data] = collectionsArray[currentCollectionIndex];
+      const nextBatch = data.tokens.slice(
+        processedCount,
+        processedCount + TOKENS_PER_BATCH
+      );
+      
+      if (nextBatch.length > 0) {
+        await loadMoreTokensFromCurrentCollection(collection, data, nextBatch);
+        setProcessedCount(prev => prev + TOKENS_PER_BATCH);
+        if (processedCount + TOKENS_PER_BATCH >= data.tokens.length) {
+          setIsCollectionComplete(true);
+        }
+      } else {
+        console.log("No more tokens to load in this collection");
         setIsCollectionComplete(true);
       }
+    } catch (error) {
+      console.error("Error loading more tokens:", error);
+      setIsLoadingTokens(false);
+      setIsLoadingContract(false);
     }
   }
 
