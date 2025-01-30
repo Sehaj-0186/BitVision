@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
-// Directly use the API key since it's already public in the frontend
-const API_KEY = '0385f2a4bef504a96ba79b36343195e5';
+const API_KEY = process.env.API_KEY;
 const BASE_URL = 'https://api.unleashnfts.com/api/v2/nft/market-insights';
 
 async function fetchWashTradeData(chain: string, timeFrame: string) {

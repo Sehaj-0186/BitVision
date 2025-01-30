@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const GradientBackground = () => (
   <>
@@ -12,17 +13,31 @@ const PredictorComponent = () => {
   const [contractAddress, setContractAddress] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsAnimating(true);
-    console.log('Contract Address:', contractAddress);
-    
-    // Simulate a delay for analytics loading
-    setTimeout(() => {
+    setError(null);
+
+    try {
+      const response = await axios.get('/api/predictiondata', {
+        params: {
+          blockchain: 'ethereum',
+          contract_address: contractAddress,
+          time_range: '24h'
+        }
+      });
+      
+      setAnalyticsData(response.data);
       setShowAnalytics(true);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to fetch analytics data');
+      setTimeout(() => setError(null), 5000); // Clear error after 5 seconds
+    } finally {
       setIsAnimating(false);
-    }, 1500);
+    }
   };
 
   const PreviousDiv = () =>{
@@ -34,6 +49,12 @@ const PredictorComponent = () => {
     <div className="w-full md:w-3/4 lg:w-1/2 h-screen md:h-[80vh] bg-zinc-950 mx-auto my-5 flex items-center justify-center p-4 relative before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(255,255,255,0.03)_70%)] before:animate-[pulse_4s_ease-in-out_infinite]">
       <div className="w-full md:w-4/5 h-4/5 bg-zinc-900 rounded-xl p-8 flex flex-col items-center relative overflow-hidden border border-zinc-800/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
         <GradientBackground />
+
+        {error && (
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-2 rounded-lg">
+            {error}
+          </div>
+        )}
 
         {!showAnalytics ? (
           <div className="relative z-10 w-full max-w-md space-y-16">
@@ -108,36 +129,36 @@ const PredictorComponent = () => {
               </p>
             </div>
             {/* Collection Analytics */}
-            <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
-              <h2 className="text-xl font-semibold text-white">Collection Analytics</h2>
-              <ul className="mt-2 text-gray-300">
-                <li>Assets: 100</li>
-                <li>Floor Price: 0.5 ETH</li>
-                <li>Sales: 250</li>
-                <li>Transactions: 300</li>
-                <li>Volume: 125 ETH</li>
-              </ul>
-            </div>
+                  <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
+                    <h2 className="text-xl font-semibold text-white">Collection Analytics</h2>
+                    <ul className="mt-2 text-gray-300">
+                    <li>Assets: {analyticsData?.assets || 0}</li>
+                    <li>Floor Price: {(analyticsData?.floor_price || 0).toFixed(4)} USD</li>
+                    <li>Sales: {analyticsData?.sales || 0}</li>
+                    <li>Transactions: {analyticsData?.transactions || 0}</li>
+                    <li>Volume: {(analyticsData?.volume || 0).toFixed(4)} USD</li>
+                    </ul>
+                  </div>
 
-            {/* Collection Scores */}
+                  {/* Collection Scores */}
             <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
               <h2 className="text-xl font-semibold text-white">Collection Scores</h2>
               <ul className="mt-2 text-gray-300">
-                <li>Royalty Price: 5%</li>
-                <li>Minting Revenue: 10 ETH</li>
+                <li>Royalty Price: {analyticsData?.royalty_price || 0}%</li>
+                <li>Minting Revenue: {analyticsData?.minting_revenue || 0} USD</li>
               </ul>
             </div>
 
             {/* Collection Traders */}
             <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
               <h2 className="text-xl font-semibold text-white">Collection Traders</h2>
-              <p className="mt-2 text-gray-300">Number of Traders: 50</p>
+              <p className="mt-2 text-gray-300">Number of Traders: {analyticsData?.traders_count || 0}</p>
             </div>
 
             {/* Washtrade */}
             <div className="bg-trnsparent p-4 rounded-lg shadow-md border border-zinc-900">
               <h2 className="text-xl font-semibold text-white">Washtrade</h2>
-              <p className="mt-2 text-gray-300">Washtrade Volume: 15 ETH</p>
+              <p className="mt-2 text-gray-300">Washtrade Volume: {(analyticsData?.washtrade_volume || 0).toFixed(4)} USD</p>
             </div>
 
             <div className="relative">
