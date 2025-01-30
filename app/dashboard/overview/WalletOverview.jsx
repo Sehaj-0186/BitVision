@@ -10,6 +10,7 @@ import {
   Landmark 
 } from 'lucide-react';
 import { CircularProgress } from '@mui/material';
+import Toast from "../../../components/ui/Toast";
 
 
 function GradientCircularProgress() {
@@ -31,8 +32,8 @@ function GradientCircularProgress() {
 const WalletOverview = () => {
   const { address, isConnected } = useAccount();
   const { data: balanceData, isLoading: isBalanceLoading } = useBalance({
-    address,
-  });
+   address: '0x7c1958ba95ab3170f6069dadf4de304b0c00000c'
+});
 
   const [showToast, setShowToast] = useState(false);
   const [portfolioValue, setPortfolioValue] = useState(0);
@@ -66,22 +67,20 @@ const WalletOverview = () => {
     }
   }, [isConnected, address]);
 
-  const copyAddress = () => {
-    if (address) {
-      navigator.clipboard.writeText(address);
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
-    }
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
   };
 
   return (
+<>
+<Toast 
+        message="Wallet Address Copied Successfully" 
+        isVisible={showToast}
+      />
     <div className="w-[95%] mx-auto rounded-xl bg-zinc-950 h-40 my-8 flex">
-      {showToast && (
-        <Toast
-          message="Wallet Address Copied!"
-          onClose={() => setShowToast(false)}
-        />
-      )}
+      
 
       <div className="w-1/2 p-4 flex items-center">
         <div className="flex items-center space-x-4">
@@ -95,7 +94,7 @@ const WalletOverview = () => {
               <span>{isConnected ? address : "Connect your wallet first"}</span>
               {isConnected && (
                 <Copy
-                  onClick={copyAddress}
+                  onClick={() => copyToClipboard(address)}
                   className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white"
                 />
               )}
@@ -105,7 +104,7 @@ const WalletOverview = () => {
                 isBalanceLoading ? (
                   <GradientCircularProgress size={24} />
                 ) : (
-                  `$${balanceData?.formatted || "0"}`
+                  `${balanceData ? (Number(balanceData.value) / Math.pow(10, balanceData.decimals)).toFixed(4) : "0"} ETH`
                 )
               ) : (
                 "Balance: $0"
@@ -153,6 +152,7 @@ const WalletOverview = () => {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
