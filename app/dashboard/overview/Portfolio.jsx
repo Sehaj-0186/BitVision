@@ -190,7 +190,7 @@ export default function Portfolio() {
           params: {
             wallet: "0x7c1958Ba95AB3170f6069DADF4de304B0c00000C",
             blockchain: "ethereum",
-            time_range: "24h",
+            time_range: "all",
             sort_by: "volume",
             sort_order: "desc"
           }

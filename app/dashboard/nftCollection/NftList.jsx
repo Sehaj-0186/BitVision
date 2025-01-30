@@ -573,80 +573,79 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
   }
 
   return (
-    <div className='w-[95%] mx-auto bg-zinc-950 h-[calc(100vh-150px)] overflow-y-auto p-4'>
-      <div className='text-3xl font-thin my-5 text-gray-400'>NFT List</div>
-      <div className='grid grid-cols-6 gap-6 min-h-[100px]'>
-        {isLoadingTokens || isLoadingContract ? (
-          <div className="col-span-6 flex flex-col justify-center items-center h-64 text-gray-400">
+    <div className="w-[95%] mx-auto bg-zinc-950 h-[calc(100vh-150px)] overflow-y-auto p-4">
+      <div className="text-3xl font-thin my-5 text-gray-400">NFT List</div>
+      <div className="grid grid-cols-6 gap-6 min-h-[100px]">
+        {displayedNftData.length === 0 ? (
+          <div className="col-span-6 flex justify-center items-center h-64 text-gray-400">
             <LoadingSpinner />
             <p className="mt-4">Loading NFTs...</p>
           </div>
-        ) : displayedNftData.length === 0 ? (
-          <div className="col-span-6 flex justify-center items-center h-64 text-gray-400">
-            No NFTs found in this collection
-          </div>
         ) : (
           displayedNftData.map((nft) => (
-            <NFTCard 
-              key={nft.id} 
-              nft={nft} 
-              onClick={handleCardClick}
-            />
+            <NFTCard key={nft.id} nft={nft} onClick={handleCardClick} />
           ))
         )}
       </div>
 
       {/* Centered button container */}
       <div className="flex justify-center gap-4 mt-8 pb-4">
-        {(isLoadingTokens || isLoadingContract) && (
-        <LoadingLine/>
-      )}
-      
+        {(isLoadingTokens || isLoadingContract) && <LoadingLine />}
 
         {/* Buttons with improved styling */}
         {uniqueTokenCount < totalCollectionTokens && (
-          <button 
-          onClick={handleLoadMoreTokens}
-          disabled={isLoadingTokens || isLoadingContract}
-          className={`px-6 py-3 rounded-lg
-            font-semibold text-white shadow-lg transform transition-all
-            border-2 border-zinc-400 bg-transparent hover:bg-opacity-10 active:bg-opacity-20 flex items-center gap-2
-            ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
-        >
-          Load More Tokens ({uniqueTokenCount}/{totalCollectionTokens})
-          {isLoadingTokens && <LoadingSpinner />}
-        </button>
-        
-        )}
-        
-        {uniqueTokenCount >= totalCollectionTokens && 
-         currentCollectionIndex < collectionsArray.length - 1 && (
-          <button 
-            onClick={handleLoadNextContract}
+          <button
+            onClick={handleLoadMoreTokens}
             disabled={isLoadingTokens || isLoadingContract}
             className={`px-6 py-3 rounded-lg
+            font-semibold text-white shadow-lg transform transition-all
+            border-2 border-zinc-400 bg-transparent hover:bg-opacity-10 active:bg-opacity-20 flex items-center gap-2
+            ${
+              isLoadingTokens || isLoadingContract
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:shadow-xl"
+            }`}
+          >
+            Load More Tokens ({uniqueTokenCount}/{totalCollectionTokens})
+            {isLoadingTokens && <LoadingSpinner />}
+          </button>
+        )}
+
+        {uniqueTokenCount >= totalCollectionTokens &&
+          currentCollectionIndex < collectionsArray.length - 1 && (
+            <button
+              onClick={handleLoadNextContract}
+              disabled={isLoadingTokens || isLoadingContract}
+              className={`px-6 py-3 rounded-lg
                        font-semibold text-white shadow-lg transform transition-all
                         border-2 border-zinc-400 bg-zinc-950 hover:bg-opacity-10 active:bg-opacity-20 flex items-center gap-2
-                        ${(isLoadingTokens || isLoadingContract) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}`}
->
-  Load Next Collection
-  {isLoadingContract && <LoadingSpinner />}
-</button>
-
-        )}
+                        ${
+                          isLoadingTokens || isLoadingContract
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:shadow-xl"
+                        }`}
+            >
+              Load Next Collection
+              {isLoadingContract && <LoadingSpinner />}
+            </button>
+          )}
       </div>
 
-      
       {!isLoading && displayedNftData.length > 0 && (
         <div className="text-center text-gray-400 mt-4">
           Showing {displayedNftData.length} of {allNftData.length} NFTs
         </div>
       )}
-      
+
       <div ref={sentinelRef} className="h-10" />
 
       {/* Render Modal */}
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} nft={selectedNft} isLoading={isModalDataLoading} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        nft={selectedNft}
+        isLoading={isModalDataLoading}
+      />
     </div>
   );
 }
