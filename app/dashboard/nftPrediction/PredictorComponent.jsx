@@ -1,10 +1,118 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+
+const ParticlesNetwork = () => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+        this.color = `rgba(${Math.random() * 100 + 100}, ${Math.random() * 100 + 100}, 255, 0.5)`;
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+      }
+      
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      init();
+    };
+    
+    let particles = [];
+    const init = () => {
+      particles = [];
+      const numberOfParticles = (canvas.width * canvas.height) / 15000;
+      for (let i = 0; i < numberOfParticles; i++) {
+        particles.push(new Particle(
+          Math.random() * canvas.width,
+          Math.random() * canvas.height
+        ));
+      }
+    };
+    
+    const connect = () => {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 150) {
+            const opacity = (1 - distance / 150) * 0.5;
+            const gradient = ctx.createLinearGradient(
+              particles[i].x,
+              particles[i].y,
+              particles[j].x,
+              particles[j].y
+            );
+            gradient.addColorStop(0, `rgba(29, 78, 216, ${opacity})`);
+            gradient.addColorStop(1, `rgba(219, 39, 119, ${opacity})`);
+            
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    };
+    
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      
+      connect();
+      requestAnimationFrame(animate);
+    };
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    animate();
+    
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
+  return (
+    <canvas 
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+    />
+  );
+};
 
 const GradientBackground = () => (
   <>
-    <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-pink-500/20 blur-3xl" />
     <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-blue-500/20 blur-3xl" />
   </>
 );
@@ -34,20 +142,29 @@ const PredictorComponent = () => {
       setShowAnalytics(true);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to fetch analytics data');
-      setTimeout(() => setError(null), 5000); // Clear error after 5 seconds
+      setTimeout(() => setError(null), 5000);
     } finally {
       setIsAnimating(false);
     }
   };
 
-  const PreviousDiv = () =>{
+  const PreviousDiv = () => {
     setShowAnalytics(false);
+  };
 
-  }
+  const GradientBackground = () => (
+    <>
+      <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-pink-500/20 blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-blue-500/20 blur-3xl" />
+    </>
+  );
 
   return (
-    <div className="w-full md:w-3/4 lg:w-1/2 h-screen md:h-[80vh] bg-zinc-950 mx-auto my-5 flex items-center justify-center p-4 relative before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(255,255,255,0.03)_70%)] before:animate-[pulse_4s_ease-in-out_infinite]">
-      <div className="w-full md:w-4/5 h-4/5 bg-zinc-900 rounded-xl p-8 flex flex-col items-center relative overflow-hidden border border-zinc-800/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+    <div className="w-full md:w-3/4 lg:w-1/2 h-screen md:h-[80vh] bg-zinc-950 mx-auto my-5 flex items-center justify-center p-4 relative overflow-hidden">
+      <ParticlesNetwork />
+      <div className="absolute inset-0 bg-gradient-to-br from-zinc-950/50 via-transparent to-transparent" />
+      
+      <div className="w-full md:w-4/5 h-4/5 bg-zinc-900/80 backdrop-blur-sm rounded-xl p-8 flex flex-col items-center relative overflow-hidden border border-zinc-800/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
         <GradientBackground />
 
         {error && (
@@ -103,10 +220,7 @@ const PredictorComponent = () => {
                     after:animate-[${isAnimating ? 'shimmer_1.5s_ease-in-out_0.2s' : 'none'}]
                   `}
                 >
-                  {/* Top light bar */}
                   <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-pink-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  {/* Bottom light bar */}
                   <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                   <span className="relative z-10 flex items-center justify-center gap-2">
@@ -119,28 +233,25 @@ const PredictorComponent = () => {
             </form>
           </div>
         ) : (
-          // New analytics section
           <div className="relative z-10 w-full max-w-md space-y-8 overflow-y-auto h-full font-light">
-
-             <div className="text-center">
+            <div className="text-center">
               <h1 className="text-4xl font-thin text-white mb-2">NFT Collection Analytics</h1>
               <p className="text-md italic bg-gradient-to-r from-blue-600 to-pink-600 text-transparent bg-clip-text">
                 Powered by AI
               </p>
             </div>
-            {/* Collection Analytics */}
-                  <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
-                    <h2 className="text-xl font-semibold text-white">Collection Analytics</h2>
-                    <ul className="mt-2 text-gray-300">
-                    <li>Assets: {analyticsData?.assets || 0}</li>
-                    <li>Floor Price: {(analyticsData?.floor_price || 0).toFixed(4)} USD</li>
-                    <li>Sales: {analyticsData?.sales || 0}</li>
-                    <li>Transactions: {analyticsData?.transactions || 0}</li>
-                    <li>Volume: {(analyticsData?.volume || 0).toFixed(4)} USD</li>
-                    </ul>
-                  </div>
 
-                  {/* Collection Scores */}
+            <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
+              <h2 className="text-xl font-semibold text-white">Collection Analytics</h2>
+              <ul className="mt-2 text-gray-300">
+                <li>Assets: {analyticsData?.assets || 0}</li>
+                <li>Floor Price: {(analyticsData?.floor_price || 0).toFixed(4)} USD</li>
+                <li>Sales: {analyticsData?.sales || 0}</li>
+                <li>Transactions: {analyticsData?.transactions || 0}</li>
+                <li>Volume: {(analyticsData?.volume || 0).toFixed(4)} USD</li>
+              </ul>
+            </div>
+
             <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
               <h2 className="text-xl font-semibold text-white">Collection Scores</h2>
               <ul className="mt-2 text-gray-300">
@@ -149,57 +260,51 @@ const PredictorComponent = () => {
               </ul>
             </div>
 
-            {/* Collection Traders */}
             <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
               <h2 className="text-xl font-semibold text-white">Collection Traders</h2>
               <p className="mt-2 text-gray-300">Number of Traders: {analyticsData?.traders_count || 0}</p>
             </div>
 
-            {/* Washtrade */}
-            <div className="bg-trnsparent p-4 rounded-lg shadow-md border border-zinc-900">
+            <div className="bg-transparent p-4 rounded-lg shadow-md border border-zinc-900">
               <h2 className="text-xl font-semibold text-white">Washtrade</h2>
               <p className="mt-2 text-gray-300">Washtrade Volume: {(analyticsData?.washtrade_volume || 0).toFixed(4)} USD</p>
             </div>
 
             <div className="relative">
-                <button
-                  onClick={()=>(PreviousDiv())}
-                  disabled={isAnimating}
-                  className={`
-                    group
-                    w-full px-6 py-3 
-                    text-white font-medium 
-                    rounded-lg
-                    relative
-                    overflow-hidden
-                    transition-all duration-300
-                    bg-gradient-to-r from-zinc-900 to-zinc-900
-                    hover:from-zinc-900 hover:to-zinc-900
-                    disabled:opacity-50
-                    before:absolute before:inset-0
-                    before:bg-gradient-to-r before:from-transparent before:via-blue-500/10 before:to-transparent
-                    before:translate-x-[-200%]
-                    before:animate-[${isAnimating ? 'shimmer_1.5s_ease-in-out' : 'none'}]
-                    after:absolute after:inset-0
-                    after:bg-gradient-to-r after:from-transparent after:via-pink-500/10 after:to-transparent
-                    after:translate-x-[-200%]
-                    after:animate-[${isAnimating ? 'shimmer_1.5s_ease-in-out_0.2s' : 'none'}]
-                  `}
-                >
-                  {/* Top light bar */}
-                  <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-pink-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  {/* Bottom light bar */}
-                  <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <button
+                onClick={PreviousDiv}
+                disabled={isAnimating}
+                className={`
+                  group
+                  w-full px-6 py-3 
+                  text-white font-medium 
+                  rounded-lg
+                  relative
+                  overflow-hidden
+                  transition-all duration-300
+                  bg-gradient-to-r from-zinc-900 to-zinc-900
+                  hover:from-zinc-900 hover:to-zinc-900
+                  disabled:opacity-50
+                  before:absolute before:inset-0
+                  before:bg-gradient-to-r before:from-transparent before:via-blue-500/10 before:to-transparent
+                  before:translate-x-[-200%]
+                  before:animate-[${isAnimating ? 'shimmer_1.5s_ease-in-out' : 'none'}]
+                  after:absolute after:inset-0
+                  after:bg-gradient-to-r after:from-transparent after:via-pink-500/10 after:to-transparent
+                  after:translate-x-[-200%]
+                  after:animate-[${isAnimating ? 'shimmer_1.5s_ease-in-out_0.2s' : 'none'}]
+                `}
+              >
+                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-pink-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    <span className={`transition-transform duration-500 ${isAnimating ? 'scale-95' : ''}`}>
-                      Go Back
-                    </span>
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  <span className={`transition-transform duration-500 ${isAnimating ? 'scale-95' : ''}`}>
+                    Go Back
                   </span>
-                </button>
-              </div>
-            
+                </span>
+              </button>
+            </div>
           </div>
         )}
       </div>
