@@ -8,9 +8,11 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { ShieldCheck, ShieldAlert } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Check, Copy } from 'lucide-react';
 import "./spinner.css";
 import { CircularProgress } from '@mui/material';
+import Toast from "../../../components/ui/Toast"
+import { useState } from "react";
 
 
 const LoadingValue = () => (
@@ -108,6 +110,8 @@ const TransactionChart = ({ transactions }) => {
 };
 
 const Modal = ({ isOpen, onClose, nft, isLoading }) => {
+  const [showToast, setShowToast] = useState(false);
+  
   if (!isOpen || !nft) return null;
 
   const formatValue = (value) => {
@@ -115,13 +119,24 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
     return value || "Not Available";
   };
 
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <>
+    <Toast 
+        message="Contract Address Copied Successfully" 
+        isVisible={showToast}
+      />
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-40">
       <div className="bg-zinc-950 rounded-lg w-[80vw] h-[80vh] flex relative">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-200 hover:text-gray-400 text-xl font-bold"
+          className="absolute top-3 right-3 text-gray-200 hover:text-gray-400 text-xl font-bold z-50"
         >
           &times;
         </button>
@@ -135,25 +150,30 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
           />
           
           <h2 className="text-xl text-white font-bold mb-2">{nft.name}</h2>
+          <div className="flex items-center relative">
+            <p className="text-gray-300 mb-1 mx-1">Contract Address:</p>
+            <button 
+              onClick={() => copyToClipboard(nft.contract_address)}
+              className="text-white mb-1 flex items-center hover:text-blue-400 transition-colors"
+            >
+              {formatValue(shortenAddress(nft.contract_address))}
+              <span className="ml-2">
+                {showToast ? <Check size={16} /> : <Copy size={16} />}
+              </span>
+            </button>
+          </div>
           <div className="flex">
-    <p className="text-gray-300 mb-1 mx-1">Contract Address:</p>
-    <div className="text-white mb-3 hover:underline">
-        <a href={`https://eth.nftscan.com/${nft.contract_address}`}>
-            {formatValue(shortenAddress(nft.contract_address))}
-        </a>
-    </div>
-</div>
-         <div className="flex">
-          <p className="text-gray-300 mb-1 mx-1">Token ID:</p>
-          <p className="text-white">{formatValue(nft.token_id)}</p>
+            <p className="text-gray-300 mb-1 mx-1">Token ID:</p>
+            <p className="text-white">{formatValue(nft.token_id)}</p>
           </div>
         </div>
+
 
         {/* Right Section with Loading State */}
         <div className="w-2/3 h-[90%] my-auto p-5 overflow-y-auto">
           {/* Loading Indicator */}
           {isLoading && (
-            <div className="absolute top-4 right-7 flex items-center gap-2">
+            <div className="absolute -top-2 right-5 flex items-center gap-2">
               <LoadingSpinner />
               <span className="animate-pulse text-gray-200">
                 Fetching NFT Details...
@@ -315,6 +335,7 @@ const Modal = ({ isOpen, onClose, nft, isLoading }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

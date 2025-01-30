@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@100;200;300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -41,12 +43,11 @@ body {
 
 
 @font-face {
-  font-family: "Cinzel";
+  font-family: 'Cinzel';
   font-style: normal;
-  font-weight: 100;
-  src: local("Cinzel"),
-    url("../fonts/Cinzel-VariableFont_wght.ttf")
-      format("ttf");
+  font-weight: 100 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-jjfZrc3UA.ttf) format('truetype');
 }
 
 @font-face {
@@ -60,20 +61,18 @@ body {
 
 @font-face {
   font-family: "Host Grotesk";
+  src: url("../fonts/HostGrotesk-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 700;
   font-style: normal;
-  font-weight: 100;
-  src: local("BonaNova"),
-    url("../fonts/HostGrotesk-VariableFont_wght.ttf")
-      format("ttf");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Clash Grotesk";
+  src: url("../fonts/ClashGrotesk-Variable.ttf") format("truetype");
+  font-weight: 100 700;
   font-style: normal;
-  font-weight: 100;
-  src: local("ClashGrotesk"),
-    url("../fonts/ClashGrotesk-Variable.ttf")
-      format("ttf");
+  font-display: swap;
 }
 
 ::-webkit-scrollbar {
@@ -99,6 +98,20 @@ body {
   animation: moveGradient 2s infinite linear;
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fixed > div > div:last-child {
+  animation: slideIn 0.3s ease-out forwards;
+}
 
 
 

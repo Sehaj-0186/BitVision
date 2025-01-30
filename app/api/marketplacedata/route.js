@@ -182,7 +182,7 @@ export async function GET() {
     const combinedData = tradersData.map((trader) => {
       const washInfo = washtradeData.find((w) => w.id === trader.id) || {};
       const healthScore = calculateHealthScore(trader, washInfo);
-console.log(healthScore)
+     
       return {
         id: trader.id,
         name: trader.name,

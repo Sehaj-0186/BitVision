@@ -179,7 +179,20 @@ const Table = () => {
                   key={item.id}
                   className="hover:bg-zinc-800/30 transition-colors"
                 >
-                  <td className="p-4 pl-6 text-white text-center">{item.name}</td>
+                  <td className="p-4 pl-6 text-white text-center">
+                  {item.url ? (
+    <a
+      href={item.url} 
+       target="_blank"
+      rel="noopener noreferrer"
+      className="text-white hover:text-blue-400 transition-colors cursor-pointer"
+    >
+      {item.name}
+    </a>
+  ) : (
+    <span className="text-white">{item.name}</span>
+  )}
+                  </td>
                   <td className="p-4 text-center text-white">
                     {item.buyers?.toLocaleString()}
                   </td>
