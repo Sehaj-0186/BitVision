@@ -55,11 +55,7 @@
 
 2. **Install Dependencies and Run**:
 
-    - **Backend (Node.js Server) 🌍**  
-      ```sh
-      cd backend && npm install 
-      npm run dev
-      ```
+   
 
     - **AI Model (Flask Server) 🧠**  
       ```sh
