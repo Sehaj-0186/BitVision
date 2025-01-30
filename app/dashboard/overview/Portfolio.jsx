@@ -309,11 +309,11 @@ export default function Portfolio() {
     <>
       <div className="w-[95%] mx-auto my-4 flex">
         <div className="flex flex-col w-[30%] my-8  justify-between">
-          <Box className="bg-black h-[50%] w-[400px] flex flex-col justify-center mx-auto text-center">
-            <div className=" ml-12 text-2xl text-white">
+          <Box className="bg-black h-[50%] w-[400px] flex flex-col justify-center mx-auto">
+            <div className=" text-2xl text-white ml-10">
               Collections Distribution
               <br />
-              <span className="text-sm text-gray-400 italic">
+              <span className="text-sm text-gray-400 italic ml-5">
                 (Top 10 collections by NFT count)
               </span>
             </div>
