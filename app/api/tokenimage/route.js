@@ -52,7 +52,7 @@ export async function GET(request) {
     if (response.data?.data?.[0]?.token_image_url) {
       imageUrl = response.data.data[0].token_image_url;
     } else {
-      imageUrl = "/—Pngtree—illustration of a flat vector_12324408.jpg";
+      imageUrl = "/—Pngtree—illustration of a flat vector_12324408.png";
     }
 
     return NextResponse.json({ imageUrl: imageUrl || "NA" });
