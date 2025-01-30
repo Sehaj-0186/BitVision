@@ -145,7 +145,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
   const addToSkipCollections = (contractAddress) => {
     if (!skipCollections.includes(contractAddress)) {
       skipCollections.push(contractAddress);
-      console.log(`Added ${contractAddress} to skip list`);
+      // console.log(`Added ${contractAddress} to skip list`);
     }
   };
 
@@ -203,12 +203,12 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
           }
         });
         
-        console.log("Portfolio Response:", portfolioResponse.data);
-        console.log("Collections:", portfolioResponse.data.collections);
+        // console.log("Portfolio Response:", portfolioResponse.data);
+        // console.log("Collections:", portfolioResponse.data.collections);
         
         const rawCollections = portfolioResponse.data.collections;
         const collectionsArr = Object.entries(rawCollections);
-        console.log("Collections Array:", collectionsArr);
+        // console.log("Collections Array:", collectionsArr);
         
         setCollectionsArray(collectionsArr);
         if(collectionsArr.length > 1) {
@@ -228,7 +228,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
 
   async function loadCollectionTokens(index, arr = collectionsArray) {
     if (index >= arr.length) {
-      console.log("No more collections to load");
+      // console.log("No more collections to load");
       return;
     }
     
@@ -247,23 +247,23 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
     const uniqueTokens = [...new Set(data.tokens)];
     data.tokens = uniqueTokens; // Replace with deduplicated array
     
-    console.log("Loading collection:", collection);
-    console.log("Collection data:", {
-      ...data,
-      tokens: uniqueTokens,
-      originalCount: data.tokens.length,
-      uniqueCount: uniqueTokens.length
-    });
+    // console.log("Loading collection:", collection);
+    // console.log("Collection data:", {
+    //   ...data,
+    //   tokens: uniqueTokens,
+    //   originalCount: data.tokens.length,
+    //   uniqueCount: uniqueTokens.length
+    // });
     
     // Skip collections without images
     if (skipCollections.includes(data.contract_address)) {
-      console.log(`Skipping collection ${collection} - no images available`);
+      // console.log(`Skipping collection ${collection} - no images available`);
       loadCollectionTokens(index + 1, arr);
       return;
     }
 
-    console.log("Loading collection:", collection);
-    console.log("Collection data:", data);
+    // console.log("Loading collection:", collection);
+    // console.log("Collection data:", data);
     
     setCurrentCollectionTokens(data.tokens);
     setLoadedTokenCount(0);
@@ -279,14 +279,14 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
         }
       }).catch(error => {
         if (error.response?.status === 404) {
-          console.log(`Collection ${collection} returned 404, adding to skip list`);
+          // console.log(`Collection ${collection} returned 404, adding to skip list`);
           addToSkipCollections(data.contract_address);
         }
         throw error;
       });
 
       if (!testImage?.data || testImage.data.imageUrl === 'NA') {
-        console.log(`Skipping collection ${collection} - invalid images`);
+        // console.log(`Skipping collection ${collection} - invalid images`);
         loadCollectionTokens(index + 1, arr);
         return;
       }
@@ -412,7 +412,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
     const isGif = url.match(/\.gif$/i) || url.includes('/elementals-images.azuki.com/');
     if (isGif) {
       if (seenGifUrls.has(url)) {
-        console.log(`Skipping duplicate GIF: ${url}`);
+        // console.log(`Skipping duplicate GIF: ${url}`);
         return true;
       }
       setSeenGifUrls(prev => new Set([...prev, url]));
@@ -424,7 +424,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
 
   async function loadMoreTokensFromCurrentCollection(collection, data, tokenBatch) {
     setIsLoadingTokens(true);
-    console.log("Loading token batch for collection:", collection);
+    // console.log("Loading token batch for collection:", collection);
     
     const newList = [];
     const processedTokens = new Set();
@@ -470,7 +470,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
             newList.push(newToken);
             break; // Success, exit retry loop
           } else if (isUnsupportedMedia(imageResponse?.data?.imageUrl)) {
-            console.log(`Skipping unsupported media for token ${tokenId}: ${imageResponse?.data?.imageUrl}`);
+            // console.log(`Skipping unsupported media for token ${tokenId}: ${imageResponse?.data?.imageUrl}`);
             setTotalCollectionTokens(prev => Math.max(0, prev - 1));
           }
           break; // Got response but not valid, skip retries
@@ -529,7 +529,7 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
           setIsCollectionComplete(true);
         }
       } else {
-        console.log("No more tokens to load in this collection");
+        // console.log("No more tokens to load in this collection");
         setIsCollectionComplete(true);
       }
     } catch (error) {

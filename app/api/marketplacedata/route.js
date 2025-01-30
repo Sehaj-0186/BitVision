@@ -81,7 +81,7 @@ function calculateBaseMetrics(trader, washInfo) {
   const totalVolume = parseFloat(trader.volume) || 1;
   const totalAssets = parseInt(trader.total_assets) || 1;
 
-  // Calculate raw ratios without normalization
+ 
   return {
     suspectSalesRatio: parseFloat(washInfo.washtrade_suspect_sales_ratio) || 0,
     washTradeWalletsRatio: (parseInt(washInfo.washtrade_wallets) || 0) / totalTraders,
@@ -92,7 +92,7 @@ function calculateBaseMetrics(trader, washInfo) {
 }
 
 function calculateWeightedComponents(metrics, timeWeight, volumeSeverity) {
-  // Calculate raw weighted values
+ 
   return {
     suspectSales: metrics.suspectSalesRatio * 0.35,
     walletRatio: metrics.washTradeWalletsRatio * 0.3,
@@ -113,7 +113,7 @@ function calculateVolumeSeverity(totalVolume) {
 }
 
 function calculateRiskMultiplier(metrics) {
-  // Use actual values without capping
+ 
   return Math.max(
     metrics.suspectSalesRatio,
     metrics.washTradeWalletsRatio,
@@ -123,7 +123,7 @@ function calculateRiskMultiplier(metrics) {
 
 
 function calculateFinalScore(components, riskMultiplier) {
-  // Calculate raw score without normalization
+
   const baseScore = Object.values(components).reduce(
     (sum, value) => sum + value,
     0
@@ -153,7 +153,7 @@ function calculateFallbackScore(trader, washInfo) {
 }
 
 function getRiskLevel(riskScore) {
-  // Adjusted thresholds for raw scores
+  
   if (riskScore >= 75) return "Extreme Risk";
   if (riskScore >= 50) return "Very High Risk";
   if (riskScore >= 25) return "High Risk";
@@ -187,7 +187,7 @@ export async function GET() {
         id: trader.id,
         name: trader.name,
         url: trader.url,
-        healthScore: healthScore, // Raw score without toFixed()
+        healthScore: healthScore, 
         riskLevel: getRiskLevel(healthScore),
         buyers: parseInt(trader.traders_buyers) || 0,
         sellers: parseInt(trader.traders_sellers) || 0,

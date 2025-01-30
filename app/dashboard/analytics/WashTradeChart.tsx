@@ -52,7 +52,7 @@ const metricConfigs = {
   }
 };
 
-// Update chains and timeframes to match MultiLineChart
+
 const timeFrames = [
   { label: '24H', value: '24h' },
   { label: '7D', value: '7d' },
@@ -126,7 +126,7 @@ export default function WashTradeChart() {
     );
   }
 
-  // Fetch data function
+  
   const fetchData = async () => {
     try {
       setIsLoading(true);
@@ -139,7 +139,7 @@ export default function WashTradeChart() {
         )
       );
 
-      // Combine and normalize data
+     
       const combinedData = responses.reduce((acc, response, index) => {
         if (response.error) throw new Error(response.error);
         
@@ -163,13 +163,13 @@ export default function WashTradeChart() {
     fetchData();
   }, [selectedTimeFrame, selectedChains]);
 
-  // Format data for chart
+  
   const formattedData = useMemo(() => {
     if (!chartData.length) return [];
 
     const timestampMap = new Map();
     
-    // Group by timestamp
+   
     chartData.forEach(dataPoint => {
       const timestamp = new Date(dataPoint.date).getTime();
       if (!timestampMap.has(timestamp)) {
@@ -190,7 +190,7 @@ export default function WashTradeChart() {
       .map(({ timestamp, ...rest }) => rest);
   }, [chartData, selectedMetrics]);
 
-  // Custom tooltip
+ 
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || !payload.length) return null;
 
@@ -227,29 +227,28 @@ export default function WashTradeChart() {
     );
   };
 
-  // Toggle functions
-  // Update toggleMetric to enforce single metric when multiple chains are selected
+  
   const toggleMetric = (metric) => {
     setSelectedMetrics(prev => {
       if (selectedChains.length > 1) {
-        // If multiple chains are selected, only allow one metric
+      
         return [metric];
       }
-      // Otherwise, handle normal toggle behavior
+     
       return prev.includes(metric) 
         ? prev.filter(m => m !== metric)
         : [...prev, metric];
     });
   };
 
-  // Update toggleChain to enforce single metric when selecting multiple chains
+ 
   const toggleChain = (chainValue) => {
     setSelectedChains(prev => {
       const newChains = prev.includes(chainValue)
         ? prev.filter(c => c !== chainValue)
         : [...prev, chainValue];
       
-      // If selecting multiple chains, force single metric
+     
       if (newChains.length > 1 && selectedMetrics.length > 1) {
         setSelectedMetrics([selectedMetrics[0]]);
       }
@@ -258,7 +257,7 @@ export default function WashTradeChart() {
     });
   };
 
-  // Get available timeframes for selected chain
+
   const availableTimeframes = useMemo(() => {
     const selectedChainConfig = chains.find(c => c.value === selectedChains[0]);
     return timeFrames.filter(tf => 
@@ -266,7 +265,7 @@ export default function WashTradeChart() {
     );
   }, [selectedChains]);
 
-  // Reset timeframe if not supported by new chain
+ 
   useEffect(() => {
     const isTimeframeSupported = availableTimeframes.some(
       tf => tf.value === selectedTimeFrame
@@ -296,7 +295,7 @@ export default function WashTradeChart() {
         <div className='w-full h-20 bg-zinc-900 flex items-end justify-between px-10 py-3 space-x-4 rounded-lg'>
                   <div className='text-3xl text-white mr-5'>WashTrade Analytics</div>
                   
-                  {/* Metrics Selection */}
+            
                   <div className='w-[400px] flex justify-evenly items-center'>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -337,7 +336,6 @@ export default function WashTradeChart() {
                     </DropdownMenuContent>
                   </DropdownMenu>
         
-                  {/* Time Frame Selection */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="min-w-[100px]">
@@ -364,7 +362,7 @@ export default function WashTradeChart() {
                     </DropdownMenuContent>
                   </DropdownMenu>
         
-                  {/* Chain Selection */}
+               
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="min-w-[100px]">

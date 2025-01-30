@@ -7,13 +7,13 @@ const Toast = ({ message, isVisible }) => {
   return (
     <div className="fixed top-4 right-4 z-50">
       <div className="relative">
-        {/* Pink gradient in top right */}
+       
         <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-br from-pink-500/30 to-transparent blur-xl" />
         
-        {/* Blue gradient in bottom left */}
+       
         <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-gradient-to-tr from-blue-500/30 to-transparent blur-xl" />
         
-        {/* Main toast container */}
+        
         <div className="relative bg-zinc-950 border border-zinc-800 px-4 py-3 rounded-lg shadow-xl min-w-[320px] min-h-[50px] flex items-center gap-3 animate-slide-in">
           <div className="flex items-center justify-center bg-green-500/10 rounded-full p-1">
             <Check className="text-green-500" size={18} />

@@ -14,7 +14,7 @@ export async function GET(request) {
   const token_id = searchParams.get("token_id");
   const currency = searchParams.get("currency") || "usd";
 
-  // Validate required parameters
+  
   if (!blockchainId || !contract_address || !token_id) {
     return NextResponse.json({
       error: "Missing required parameters",

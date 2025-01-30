@@ -12,7 +12,7 @@ async function fetchWashTradeData(chain: string, timeFrame: string) {
       method: 'GET',
       headers: {
         'accept': 'application/json',
-        'x-api-key': API_KEY  // Use the API key directly
+        'x-api-key': API_KEY 
       }
     };
 
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
 
     const data = await fetchWashTradeData(chain, timeFrame);
 
-    // Format response data
+   
     const formattedData = data.block_dates.map((date: string, index: number) => ({
       date: new Date(date).toISOString(),
       assets: data.washtrade_assets_trend[index] || 0,

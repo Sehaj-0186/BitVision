@@ -12,14 +12,14 @@ const PRICE_ESTIMATE_URL = 'https://api.unleashnfts.com/api/v2/nft/liquify/price
 
 export async function GET(request) {
     try {
-        // Get query parameters
+     
         const { searchParams } = new URL(request.url);
         
-        // Required parameters
+      
         const contract_address = searchParams.get('contract_address');
         const token_id = searchParams.get('token_id');
         
-        // Optional parameters with defaults
+        
         const blockchain = searchParams.get('blockchain') || 'ethereum';
         const time_range = searchParams.get('time_range') || 'all';
         const sort_by = searchParams.get('sort_by') || 'sales';
@@ -27,7 +27,7 @@ export async function GET(request) {
         const offset = searchParams.get('offset') || '0';
         const limit = searchParams.get('limit') || '30';
 
-        // Validate required parameters
+     
         if (!contract_address || !token_id) {
             return NextResponse.json(
                 { error: "Missing required parameters: contract_address and token_id" },
@@ -35,7 +35,7 @@ export async function GET(request) {
             );
         }
 
-        // Try to fetch all data, but handle failures gracefully
+       
         let [analyticsResponse, washTradeResponse, scoresResponse, transactionsResponse, priceEstimateResponse] = 
             await Promise.allSettled([
                 axios.get(BASE_URL, {
@@ -113,7 +113,7 @@ export async function GET(request) {
                 })
             ]);
 
-        // Safely extract data with fallbacks
+        
         const analyticsData = analyticsResponse.status === 'fulfilled' ? 
             analyticsResponse.value?.data?.data?.[0] : null;
             
@@ -123,14 +123,14 @@ export async function GET(request) {
         const scoreData = scoresResponse.status === 'fulfilled' ? 
             scoresResponse.value?.data?.data?.[0] : null;
 
-        // Handle transactions list safely
+       
         const transactionList = transactionsResponse.status === 'fulfilled' ? 
             transactionsResponse.value?.data?.data : [];
             
         const priceEstimateData = priceEstimateResponse.status === 'fulfilled' ? 
             priceEstimateResponse.value?.data?.data?.[0] : null;
 
-        // Transform data with null checks
+      
         const transformedData = {
             currentPrice: scoreData?.price?.toFixed(2) ?? "Not Available",
             floorPrice: analyticsData?.floor_price ?? "Not Available",
@@ -140,19 +140,17 @@ export async function GET(request) {
             sales: analyticsData?.sales?.toString() ?? "0",
             totalTransfers: analyticsData?.transfers?.toString() ?? "0",
             volume: analyticsData?.volume?.toFixed(2) ?? "0",
-            
-            // Wash trade data with null checks
+           
             suspectTransactions: washTradeData?.washtrade_suspect_transactions?.toString() ?? "0",
             connectedWallets: washTradeData?.washtrade_wallets?.toString() ?? "0",
             washTradeVolume: washTradeData?.washtrade_volume?.toFixed(2) ?? "0",
             washTradeStatus: washTradeData?.washtrade_suspect_transactions > 0 ? "Active" : "Clear",
 
-            // Score data with null checks
             estimatedPrice: scoreData?.estimated_price?.toFixed(2) ?? "Not Available",
             startPrice: scoreData?.start_price?.toFixed(2) ?? "Not Available",
             rarityRank: scoreData?.rarity_rank?.toString() ?? "Not Available",
             rarityScore: scoreData?.rarity_score?.toString() ?? "Not Available",
-            // Add new data
+         
             transactions: Array.isArray(transactionList)
                 ? transactionList.map(tx => ({
                     date: tx.timestamp,
@@ -178,7 +176,7 @@ export async function GET(request) {
     } catch (error) {
         console.error("API Error:", error.response?.data || error.message);
         
-        // Handle different types of errors
+        
         if (error.response?.status === 404) {
             return NextResponse.json(
                 { error: "NFT data not found" },
