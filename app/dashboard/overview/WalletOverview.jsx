@@ -32,7 +32,7 @@ function GradientCircularProgress() {
 const WalletOverview = () => {
   const { address, isConnected } = useAccount();
   const { data: balanceData, isLoading: isBalanceLoading } = useBalance({
-   address: '0x7c1958ba95ab3170f6069dadf4de304b0c00000c'
+    address
 });
 
   const [showToast, setShowToast] = useState(false);
@@ -40,12 +40,12 @@ const WalletOverview = () => {
   const [nftCount, setNftCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchWalletScores = async (walletAddress) => {
-     `/api/nftscore?wallet=${'0x7c1958ba95ab3170f6069dadf4de304b0c00000c'}`
+  const fetchWalletScores = async () => {
+     `/api/nftscore?wallet=${address}`
     try {
       setIsLoading(true);
       const response = await fetch(
-        `/api/nftscore?wallet=${`0x7c1958ba95ab3170f6069dadf4de304b0c00000c`}`
+        `/api/nftscore?wallet=${address}`
       );
 
       const data = await response.json();

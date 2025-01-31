@@ -10,6 +10,7 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { ShieldCheck, ShieldAlert } from 'lucide-react';
 import axios from 'axios';
 import { CircularProgress } from '@mui/material';
+import { useAccount } from 'wagmi';
 
 
 const formatNumber = (number) => {
@@ -179,36 +180,39 @@ export default function Portfolio() {
     };
   }, [walletDataList]);
 
-
+const {address}=useAccount();
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const [analysisResponse, portfolioResponse, rewardsResponse] = await Promise.all([
-        axios.get("/api/walletanalysis", {
-          params: {
-            wallet: "0x7c1958Ba95AB3170f6069DADF4de304B0c00000C",
-            blockchain: "ethereum",
-            time_range: "all",
-            sort_by: "volume",
-            sort_order: "desc"
-          }
-        }),
-        axios.get("/api/walletportfolio", {
-          params: { 
-            wallet: "0x7c1958Ba95AB3170f6069DADF4de304B0c00000C"
-          }
-        }),
-        axios.get("/api/marketplacerewards", {
-          params: { 
-            wallet: "0x7c1958Ba95AB3170f6069DADF4de304B0c00000C"
-          }
-        }).catch(error => {
-          console.warn('Marketplace rewards fetch failed:', error);
-          return { data: { blur: 0, looks: 0 } };
-        })
-      ]);
+      const [analysisResponse, portfolioResponse, rewardsResponse] =
+        await Promise.all([
+          axios.get("/api/walletanalysis", {
+            params: {
+              wallet: `${address}`,
+              blockchain: "ethereum",
+              time_range: "all",
+              sort_by: "volume",
+              sort_order: "desc",
+            },
+          }),
+          axios.get("/api/walletportfolio", {
+            params: {
+              wallet: `${address}`,
+            },
+          }),
+          axios
+            .get("/api/marketplacerewards", {
+              params: {
+                wallet: `${address}`,
+              },
+            })
+            .catch((error) => {
+              console.warn("Marketplace rewards fetch failed:", error);
+              return { data: { blur: 0, looks: 0 } };
+            }),
+        ]);
 
       if (analysisResponse.data?.data) {
         const processedData = analysisResponse.data.data.map(item => ({

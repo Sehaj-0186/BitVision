@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Modal from './Modal'; // Import the Modal component
 import axios from 'axios'
 import { CircularProgress } from '@mui/material';
+import { useAccount } from 'wagmi';
 
 
 // New component for lazy-loaded NFT card
@@ -193,14 +194,17 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
     });
   };
 
+const {address}=useAccount();
+const [hasNoCollections, setHasNoCollections] = useState(false);
+
   useEffect(() => {
     async function fetchNFTData() {
       setIsLoading(true);
       try {
         const portfolioResponse = await axios.get("/api/walletportfolio", {
-          params: { 
-            wallet: "0x7c1958Ba95AB3170f6069DADF4de304B0c00000C"
-          }
+          params: {
+            wallet: `${address}`,
+          },
         });
         
         // console.log("Portfolio Response:", portfolioResponse.data);
@@ -214,10 +218,11 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
         if(collectionsArr.length > 1) {
           loadCollectionTokens(1, collectionsArr);
         } else {
-          console.log("No collections found or insufficient data");
+          setHasNoCollections(true);
         }
       } catch (error) {
         console.error("Portfolio fetch error:", error.response || error);
+        setHasNoCollections(true);
       } finally {
         setIsLoading(false);
       }
@@ -568,6 +573,14 @@ const [isModalDataLoading, setIsModalDataLoading] = useState(false);
         <LoadingSpinner />
         <p className="mt-4 text-lg animate-bounce">Loading your NFTs... Please wait!</p>
        
+      </div>
+    );
+  }
+
+  if (hasNoCollections) {
+    return (
+      <div className="w-[95%] mx-auto bg-zinc-950 h-[calc(100vh-150px)] p-4 flex flex-col items-center justify-center text-white">
+        <p className="text-xl text-gray-400">No NFT collections found in this wallet.</p>
       </div>
     );
   }
