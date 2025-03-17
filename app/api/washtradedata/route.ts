@@ -79,7 +79,8 @@ export async function GET(request: Request) {
 
     const formattedData = data.block_dates.map(
       (date: string, index: number) => ({
-        date: new Date(date).toISOString(),
+        // Fix date parsing by removing the extra quotes in the date strings
+        date: new Date(date.replace(/'/g, "")).toISOString(),
         assets: data.washtrade_assets_trend[index] || 0,
         suspectSales: data.washtrade_suspect_sales_trend[index] || 0,
         suspectTransactions:
