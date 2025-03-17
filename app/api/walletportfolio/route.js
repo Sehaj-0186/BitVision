@@ -24,7 +24,7 @@ export async function GET(request) {
 
   try {
     let hasNext = true;
-    
+
     while (hasNext) {
       const response = await axios.get(BASE_URL, {
         headers: {
@@ -41,21 +41,30 @@ export async function GET(request) {
         },
       });
 
-      const nfts = response.data.data;
-      if (!nfts || nfts.length === 0) break;
+      // Check if data.data exists and is an array
+      const nfts = response.data && response.data.data;
+      if (!nfts) break;
 
-      nfts.forEach((nft) => {
-        const { collection, contract_address, token_id } = nft;
-        if (!portfolio.collections[collection]) {
-          portfolio.collections[collection] = {
-            contract_address,
-            tokens: [],
-            count: 0,
-          };
-        }
-        portfolio.collections[collection].tokens.push(token_id);
-        portfolio.collections[collection].count++;
-      });
+      // Handle both array and non-array responses
+      if (Array.isArray(nfts)) {
+        if (nfts.length === 0) break;
+
+        nfts.forEach((nft) => {
+          const { collection, contract_address, token_id } = nft;
+          if (!portfolio.collections[collection]) {
+            portfolio.collections[collection] = {
+              contract_address,
+              tokens: [],
+              count: 0,
+            };
+          }
+          portfolio.collections[collection].tokens.push(token_id);
+          portfolio.collections[collection].count++;
+        });
+      } else {
+        console.log("API response is not an array:", nfts);
+        break; // Exit loop if not an array
+      }
 
       hasNext = response.data.pagination?.has_next || false;
       if (hasNext) {
@@ -67,8 +76,8 @@ export async function GET(request) {
       ...portfolio,
       pagination: {
         total: Object.keys(portfolio.collections).length,
-        hasNext: false
-      }
+        hasNext: false,
+      },
     });
   } catch (error) {
     console.error("Error Response:", error.response?.data || error.message);
